@@ -351,7 +351,7 @@ Smarket.corr(numeric_only=True).round(2)
 Smarket.plot(y='Volume');
 ```
 
-![](Figures\Smarket_8_0.png)
+![](Figures/Smarket_8_0.png)
 
 # 3. Logistische Regression
 
