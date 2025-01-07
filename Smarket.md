@@ -1,3 +1,8 @@
+---
+title: "Stock Market "
+author: "db"
+---
+
 # 1. Datenüberblick
 - Tägliche prozentuale Renditen für den S&P 500 Aktienindex zwischen 2001 und 2005.
 - Es gibt 1250 Zeilen.
