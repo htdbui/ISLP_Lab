@@ -987,7 +987,7 @@ ax_hr.set_xticklabels(range(24)[::2])
 ax_hr.set_xlabel('Hour'); ax_hr.set_ylabel('Coefficient');
 ```
 
-![png](Figures\BikeShare_21_0.png)
+![](Figures/bikeshare_21_0.png)
 
 # 4. Poisson Regression
 
@@ -1021,7 +1021,7 @@ ax_hr.set_xticklabels(range(24)[::2])
 ax_hr.set_xlabel('Hour'); ax_hr.set_ylabel('Coefficient');
 ```
 
-![png](Figures\BikeShare_26_0.png)
+![](Figures/bikeshare_26_0.png)
 
 - Wir plotten die angepassten Werte von zwei Modellen.
 
@@ -1034,7 +1034,7 @@ ax.set_ylabel('Poisson Regression Fit')
 ax.axline([0,0], c='black', linewidth=3, linestyle='--', slope=1);
 ```
 
-![png](Figures\BikeShare_28_0.png)
+![](Figures/bikeshare_28_0.png)
 
 - Poisson-Regressionsvorhersagen korrelieren mit linearen Modellvorhersagen.
 - Sie sind jedoch nicht negativ und tendieren dazu, bei sehr niedrigen oder hohen Fahrgastzahlen größer zu sein.
