@@ -4,6 +4,7 @@ author: "db"
 ---
 
 # 1. Datenüberblick
+
 - Major League Baseball Daten (1986-1987)
 - Zeilen: 322 (59 fehlen, 263 übrig)
 - Zielvariable: `Salary` (Jahresgehalt 1987 in Tausend Dollar)
@@ -435,6 +436,7 @@ hitters_MSE = sklearn_selected(sm.OLS, strategy).fit(Hitters, Y)
 # Show the selected predictors
 hitters_MSE.selected_state_
 ```
+
 ('Assists','AtBat','CAtBat','CHits','CHmRun','CRBI','CRuns','CWalks','Division',
 'Errors','Hits','HmRun','League','NewLeague','PutOuts','RBI','Runs','Walks','Years')
 
@@ -512,7 +514,7 @@ ax.set_ylabel('MSE'); ax.set_xlabel('Number of Variables')
 ax.set_ylim([50000,250000]); ax.set_xticks(range(20)); ax.legend();
 ```
 
-![](Figures\hitters_22_0.png)
+![](Figures/hitters_22_0.png)
 
 ### b. Auswahl von Modellen mit Cross-Validation
 
@@ -574,7 +576,7 @@ ax.errorbar(x = np.arange(n_steps), # n_steps=20
 ax.set_ylim([50000,250000]); ax.legend(); mse_fig
 ```
 
-![](Figures\hitters_29_0.png)
+![](Figures/hitters_29_0.png)
 
 ### c. Auswahl von Modellen mit dem Validierungsansatz
 
@@ -620,7 +622,7 @@ ax.plot(np.arange(n_steps), # n_steps=20
 ax.set_xticks(np.arange(n_steps)[::2]); ax.set_ylim([50000,250000]); ax.legend(); mse_fig
 ```
 
-![](Figures\hitters_37_0.png)
+![](Figures/hitters_37_0.png)
 
 ## 3.2. Best Subset Selection
 
@@ -682,7 +684,9 @@ path[3]
      'Time_exceeded': False}
 
 # 4. Ridge Regression
+
 ## 4.1. Ridge Regression für ein $\lambda$
+
 - `X` ohne Interzeptor verwenden.
 - Spalten von `X` standardisieren (Mittelwert 0, Standardabweichung 1).
 - Zwei Optionen für Ridge Regression:
@@ -706,10 +710,10 @@ Xs = Xs / X_scale[None,:]
 - $\lambda$-Werte von $10^{8}$ bis $10^{-2}$ erstellen, skaliert durch die Standardabweichung von y.
 - **Gründe für die Skalierung:**
 1. Normierung des Regularisierungseffekts:
-  - Der Regularisierungsterm wird zur RSS in der Verlustfunktion hinzugefügt.
-    - Große y-Skala: Große RSS, kleinerer Effekt des Regularisierungsterms.
-    - Kleine y-Skala: Kleine RSS, größerer Effekt des Regularisierungsterms.
-  - Skalierung des Regularisierungsterms mit der Standardabweichung von y sorgt für einen konsistenten Effekt auf die Verlustfunktion, unabhängig von der Skala von y.
+   - Der Regularisierungsterm wird zur RSS in der Verlustfunktion hinzugefügt.
+     - Große y-Skala: Große RSS, kleinerer Effekt des Regularisierungsterms.
+     - Kleine y-Skala: Kleine RSS, größerer Effekt des Regularisierungsterms.
+   - Skalierung des Regularisierungsterms mit der Standardabweichung von y sorgt für einen konsistenten Effekt auf die Verlustfunktion, unabhängig von der Skala von y.
 2. Vergleichbarkeit zwischen Datensätzen:
 3. Stabilität bei der Modellauswahl:
    - Skalierung stabilisiert den Auswahlprozess von $\lambda$ (z.B. bei Kreuzvalidierung) und stellt sicher, dass der gewählte Wert nicht zu empfindlich auf die Skala von y reagiert.
@@ -1065,7 +1069,7 @@ ax.set_xlabel(r'$-\log(\lambda)$'); ax.set_ylabel('Standardized coefficients')
 ax.legend(loc='upper left');
 ```
 
-![](Figures\hitters_58_0.png)
+![](Figures/hitters_58_0.png)
 
 - $\ell_2$-Norm: Wurzel der Summe der quadrierten Koeffizienten.
 - Großes $\lambda$: kleinere Koeffizienten in $\ell_2$-Norm und umgekehrt.
@@ -1157,6 +1161,7 @@ results = skm.cross_validate(ridge, X, Y, scoring='neg_mean_squared_error',
     array([231788.32155285])
 
 ## 4.4. Validierungssatz zur $\lambda$-Auswahl nutzen
+
 - `GridSearchCV()` von `sklearn.model_selection` verwenden.
 - Beste $\lambda$ finden.
 
@@ -1172,8 +1177,6 @@ grid = skm.GridSearchCV(pipe, param_grid, cv=validation, scoring='neg_mean_squar
 grid.fit(X, Y);
 ```
 
-
-
 ```python=
 # grid.best_params_ show the best lambda of 0.0059
 # Get the estimator
@@ -1185,7 +1188,6 @@ best_model.named_steps['ridge'].coef_
     array([-257.254,  278.754,   12.654,  -19.894,  -4.443,  119.746,  -44.113, -178.083,
             127.260,   48.003,  278.299,  141.610,-173.705,   30.842,  -60.784,   78.399,
              45.043,  -24.238,  -13.827])
-
 
 ## 4.5. $\lambda$ per Kreuzvalidierung auswählen
 
@@ -1216,7 +1218,6 @@ best_model.named_steps['ridge'].coef_
            [ -50.819, -105.157,  122.007,   57.186,  210.352,  118.057],
            [-150.220,   30.366,  -61.625,   77.738,   40.074,  -25.022]])
 
-
 - Kreuzvalidiertes MSE als Funktion von $-\log(\lambda)$ plotten.
 - Schrumpfung nimmt von links nach rechts ab.
 
@@ -1230,7 +1231,7 @@ ax.set_ylim([50000,250000])
 ax.set_xlabel(r'$-\log(\lambda)$'); ax.set_ylabel('Cross-validated MSE');
 ```
 
-![](Figures\hitters_78_0.png)
+![](Figures/hitters_78_0.png)
 
 - `GridSearchCV()` verwenden, um bestes $\lambda$ mit $R^2$ als Kriterium zu finden.
   - $R^2$ ist das Standard-Kriterium in `GridSearchCV()`.
@@ -1247,7 +1248,7 @@ ax.errorbar(-np.log(lambdas), grid_r2.cv_results_['mean_test_score'],
 ax.set_xlabel(r'$-\log(\lambda)$'); ax.set_ylabel('Cross-validated $R^2$');
 ```
 
-![](Figures\hitters_80_0.png)
+![](Figures/hitters_80_0.png)
 
 ## 4.6. Schnelle Kreuzvalidierung für Lösungswege
 
@@ -1283,7 +1284,7 @@ ax.set_ylim([50000,250000])
 ax.set_xlabel(r'$-\log(\lambda)$'); ax.set_ylabel('Cross-validated MSE');
 ```
 
-![](Figures\hitters_82_0.png)
+![](Figures/hitters_82_0.png)
 
 - Bestes $\lambda$ und zugehöriges Test-MSE anzeigen.
 
@@ -1916,7 +1917,7 @@ ax.legend(loc='upper left')
 ax.set_xlabel(r'$-\log(\lambda)$'); ax.set_ylabel('Standardized coefficiients');
 ```
 
-![](Figures\hitters_96_0.png)
+![](Figures/hitters_96_0.png)
 
 - Bestes $\lambda$ und zugehöriges Test-MSE anzeigen.
 - Vergleich: bestes $\lambda$ und Test-MSE des Ridge-Modells: 0.012 und 117408.574.
@@ -1940,7 +1941,7 @@ ax.set_ylim([50000,250000])
 ax.set_xlabel(r'$-\log(\lambda)$'); ax.set_ylabel('Cross-validated MSE');
 ```
 
-![](Figures\hitters_100_0.png)
+![](Figures/hitters_100_0.png)
 
 - Koeffizienten des Modells mit bestem $\lambda$ anzeigen.
 - Beim Lasso sind 6 von 19 Koeffizienten genau null; das Modell umfasst nur 13 Variablen.
@@ -1983,7 +1984,6 @@ pipe.named_steps['pca'].explained_variance_ratio_
 
     array([0.383, 0.218])
 
-
 - `GridSearchCV()` verwenden, um die Anzahl der Komponenten durch Variation des `n_components` Parameters auszuwählen.
 
 ```python=
@@ -2010,7 +2010,7 @@ ax.set_ylabel('Cross-validated MSE'); ax.set_xlabel('# principal components')
 ax.set_xticks(n_comp); ax.set_ylim([50000,250000]);
 ```
 
-![](Figures\hitters_111_0.png)
+![](Figures/hitters_111_0.png)
 
 - 13 Komponenten haben den kleinsten Kreuzvalidierungsfehler, aber 4 Komponenten liefern einen ähnlichen Fehler. Modell mit weniger Komponenten wählen.
 - Kreuzvalidiertes MSE für die beste Anzahl an Komponenten anzeigen.
@@ -2052,7 +2052,6 @@ cv_null = skm.cross_validate(linreg, Xn, Y, cv=kfold,
 
     204139.307
 
-
 # 7. Regression der partiellen kleinsten Quadrate
 
 - `n_components` gibt die Anzahl der latenten Variablen an.
@@ -2090,8 +2089,7 @@ ax.set_ylabel('Cross-validated MSE'); ax.set_xlabel('# principal components')
 ax.set_xticks(n_comp); ax.set_ylim([50000,250000]);
 ```
 
-![](Figures\hitters_124_0.png)
-
+![](Figures/hitters_124_0.png)
 
 - Der CV-Fehler ist bei 12 Komponenten minimal, aber der Leistungsunterschied zu 2 oder 3 Komponenten ist gering.
 - Das beste kreuzvalidierte MSE von PCA beträgt 121830.867.

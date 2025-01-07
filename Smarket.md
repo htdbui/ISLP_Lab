@@ -4,6 +4,7 @@ author: "db"
 ---
 
 # 1. Datenüberblick
+
 - Tägliche prozentuale Renditen für den S&P 500 Aktienindex zwischen 2001 und 2005.
 - Es gibt 1250 Zeilen.
 - Es gibt 9 Variablen:
@@ -375,7 +376,7 @@ summarize(results)
   <th>coef</th>
   <th>std err</th>
   <th>z</th>
-  <th>P&gt;|z|</th>
+  <th>P>|z|</th>
 </tr>
   </thead>
   <tbody>
@@ -537,7 +538,6 @@ confusion_table(labels, L_test)
   </tbody>
 </table>
 
-
 ```python=
 np.mean(labels == L_test), np.mean(labels != L_test)
 ```
@@ -557,7 +557,7 @@ L_test.value_counts(normalize=True)
     Down 0.44
     Name: proportion, dtype: float64  
 
--    Entfernen schwacher Prädiktoren könnte helfen.
+- Entfernen schwacher Prädiktoren könnte helfen.
 - Modell neu anpassen mit nur `Lag1` und `Lag2`, den stärksten Prädiktoren.
 
 ```python=
@@ -592,8 +592,8 @@ confusion_table(labels, L_test)
 </table>
 
 - Bewerten:
-    - Gesamtgenauigkeit.
-    - Genauigkeit für Tage mit vorhergesagtem Anstieg.
+  - Gesamtgenauigkeit.
+  - Genauigkeit für Tage mit vorhergesagtem Anstieg.
 
 ```python=
 (35+106)/252, 106/(106+76)
@@ -627,8 +627,8 @@ lda = LDA(store_covariance=True).fit(X_train, L_train);
 
 - In `sklearn` zeigt ein nachgestelltes `_` Werte, die durch `fit()` geschätzt wurden.
 - `means_` liefert den Durchschnittswert jedes Prädiktors für jede Klasse.
-    - Es zeigt, dass Renditen der letzten zwei Tage vor Marktanstiegen negativ und vor Marktabschwüngen positiv sind.
-    - Dieses Ergebnis können wir selbst berechnen.
+  - Es zeigt, dass Renditen der letzten zwei Tage vor Marktanstiegen negativ und vor Marktabschwüngen positiv sind.
+  - Dieses Ergebnis können wir selbst berechnen.
 
 ```python=
 lda.means_
@@ -692,7 +692,7 @@ L_train.value_counts(normalize=True)
 - Bei LDA teilen alle Klassen (Down und Up) die gleiche Kovarianzstruktur.
 - sklearn’s LDA schätzt eine gemeinsame Kovarianzmatrix für das gesamte Dataset.
 - `lda.covariance_` enthält die gepoolte Kovarianzmatrix der Merkmale.
-    - [ [var(lag1), cov(lag1, lag2)],
+  - [ [var(lag1), cov(lag1, lag2)],
     [cov(lag1, lag2), var(lag2)] ]
 
 ```python=
@@ -706,7 +706,7 @@ lda.covariance_
 - Jede Spalte projiziert Merkmale auf eine neue Achse, die Klassen trennt.
 - Bei k Klassen gibt es bis zu k-1 Vektoren.
 - Bei binärer Klassifikation (k=2) gibt es einen Vektor.
-    - Diese Werte sind die Multiplikatoren für `Lag1` und `Lag2` in der LDA-Entscheidungsregel.
+  - Diese Werte sind die Multiplikatoren für `Lag1` und `Lag2` in der LDA-Entscheidungsregel.
 
 ```python=
 lda.scalings_
@@ -761,8 +761,6 @@ np.all([lda.classes_[i] for i in np.argmax(lda_prob, 1)] == lda_pred)
 ```
 
     (True, True)
-
-
 
 ```python=
 max(lda_prob[:,0])
@@ -840,6 +838,7 @@ np.mean(qda_pred == L_test)
 - Dies deutet darauf hin, dass QDA Beziehungen besser erfassen kann als LDA und logistische Regression.
 
 # 6. Naive Bayes
+
 - - Naive-Bayes-Modell mit `GaussianNB()` auf `Smarket`-Daten angepasst, ähnlich wie `LDA()` und `QDA()`.
 - Standardmäßig Gaußsche Verteilung, Kerndichtemethode auch möglich.
 
