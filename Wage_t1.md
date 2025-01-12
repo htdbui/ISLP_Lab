@@ -1,4 +1,8 @@
-# Bookmarked Wage
+---
+title: "Wage "
+author: "db"
+---
+
 # 1. Datenbeschreibung
 - Daten von 3000 männlichen Arbeitern aus der Mid-Atlantic-Region.
   - 3000 Zeilen
