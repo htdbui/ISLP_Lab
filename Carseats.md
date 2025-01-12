@@ -28,7 +28,7 @@ from ISLP.models import ModelSpec as MS
 
 ```python=
 Carseats = load_data('Carseats')
-Carseats.head()
+Carseats.head(2)
 ```
 
 <table>
@@ -77,48 +77,6 @@ Carseats.head()
       <td>Yes</td>
       <td>Yes</td>
     </tr>
-    <tr>
-      <th>2</th>
-      <td>10.06</td>
-      <td>113</td>
-      <td>35</td>
-      <td>10</td>
-      <td>269</td>
-      <td>80</td>
-      <td>Medium</td>
-      <td>59</td>
-      <td>12</td>
-      <td>Yes</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>7.40</td>
-      <td>117</td>
-      <td>100</td>
-      <td>4</td>
-      <td>466</td>
-      <td>97</td>
-      <td>Medium</td>
-      <td>55</td>
-      <td>14</td>
-      <td>Yes</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4.15</td>
-      <td>141</td>
-      <td>64</td>
-      <td>3</td>
-      <td>340</td>
-      <td>128</td>
-      <td>Bad</td>
-      <td>38</td>
-      <td>13</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
   </tbody>
 </table>
 
@@ -141,17 +99,6 @@ Carseats.describe().round(1)
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th>count</th>
-      <td>400.0</td>
-      <td>400.0</td>
-      <td>400.0</td>
-      <td>400.0</td>
-      <td>400.0</td>
-      <td>400.0</td>
-      <td>400.0</td>
-      <td>400.0</td>
-    </tr>
     <tr>
       <th>mean</th>
       <td>7.5</td>
