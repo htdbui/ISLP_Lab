@@ -334,7 +334,7 @@ fig, ax = plt.subplots(figsize=(12,12))
 plot_tree(TRE_clas, feature_names=feature_names, ax=ax);
 ```
 
-![](output_17_0.png)
+![](Figures\carseats_17_0.png)
 
 - Wichtiger Indikator für `Sales`: `ShelveLoc`
 - Baum im Textformat drucken:
@@ -462,7 +462,7 @@ plot_tree(grid.best_estimator_, feature_names=feature_names, ax=ax);
 ```
 
     
-![](output_32_0.png)
+![](Figures\carseats_32_0.png)
     
 
 - We can count the leaves.
@@ -583,7 +583,7 @@ plot_tree(grid.best_estimator_, feature_names=feature_names, ax=ax);
 ```
 
     
-![](output_48_0.png)
+![](Figures\carseats_48_0.png)
     
 
 ```python=
