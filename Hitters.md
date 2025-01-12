@@ -1,3 +1,5 @@
+# Hitters
+
 ---
 title: "Hitters"
 author: "db"
@@ -57,146 +59,93 @@ Hitters = load_data('Hitters'); print(Hitters.shape); Hitters.head()
 
 <table class="dataframe">
   <thead>
-<tr style="text-align: right;">
-  <th></th>
-  <th>AtBat</th>
-  <th>Hits</th>
-  <th>HmRun</th>
-  <th>Runs</th>
-  <th>RBI</th>
-  <th>Walks</th>
-  <th>Years</th>
-  <th>CAtBat</th>
-  <th>CHits</th>
-  <th>CHmRun</th>
-  <th>CRuns</th>
-  <th>CRBI</th>
-  <th>CWalks</th>
-  <th>League</th>
-  <th>Division</th>
-  <th>PutOuts</th>
-  <th>Assists</th>
-  <th>Errors</th>
-  <th>Salary</th>
-  <th>NewLeague</th>
-</tr>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AtBat</th>
+      <th>Hits</th>
+      <th>HmRun</th>
+      <th>Runs</th>
+      <th>RBI</th>
+      <th>Walks</th>
+      <th>Years</th>
+      <th>CAtBat</th>
+      <th>CHits</th>
+      <th>CHmRun</th>
+    </tr>
   </thead>
   <tbody>
-<tr>
-  <th>0</th>
-  <td>293</td>
-  <td>66</td>
-  <td>1</td>
-  <td>30</td>
-  <td>29</td>
-  <td>14</td>
-  <td>1</td>
-  <td>293</td>
-  <td>66</td>
-  <td>1</td>
-  <td>30</td>
-  <td>29</td>
-  <td>14</td>
-  <td>A</td>
-  <td>E</td>
-  <td>446</td>
-  <td>33</td>
-  <td>20</td>
-  <td>NaN</td>
-  <td>A</td>
-</tr>
-<tr>
-  <th>1</th>
-  <td>315</td>
-  <td>81</td>
-  <td>7</td>
-  <td>24</td>
-  <td>38</td>
-  <td>39</td>
-  <td>14</td>
-  <td>3449</td>
-  <td>835</td>
-  <td>69</td>
-  <td>321</td>
-  <td>414</td>
-  <td>375</td>
-  <td>N</td>
-  <td>W</td>
-  <td>632</td>
-  <td>43</td>
-  <td>10</td>
-  <td>475.0</td>
-  <td>N</td>
-</tr>
-<tr>
-  <th>2</th>
-  <td>479</td>
-  <td>130</td>
-  <td>18</td>
-  <td>66</td>
-  <td>72</td>
-  <td>76</td>
-  <td>3</td>
-  <td>1624</td>
-  <td>457</td>
-  <td>63</td>
-  <td>224</td>
-  <td>266</td>
-  <td>263</td>
-  <td>A</td>
-  <td>W</td>
-  <td>880</td>
-  <td>82</td>
-  <td>14</td>
-  <td>480.0</td>
-  <td>A</td>
-</tr>
-<tr>
-  <th>3</th>
-  <td>496</td>
-  <td>141</td>
-  <td>20</td>
-  <td>65</td>
-  <td>78</td>
-  <td>37</td>
-  <td>11</td>
-  <td>5628</td>
-  <td>1575</td>
-  <td>225</td>
-  <td>828</td>
-  <td>838</td>
-  <td>354</td>
-  <td>N</td>
-  <td>E</td>
-  <td>200</td>
-  <td>11</td>
-  <td>3</td>
-  <td>500.0</td>
-  <td>N</td>
-</tr>
-<tr>
-  <th>4</th>
-  <td>321</td>
-  <td>87</td>
-  <td>10</td>
-  <td>39</td>
-  <td>42</td>
-  <td>30</td>
-  <td>2</td>
-  <td>396</td>
-  <td>101</td>
-  <td>12</td>
-  <td>48</td>
-  <td>46</td>
-  <td>33</td>
-  <td>N</td>
-  <td>E</td>
-  <td>805</td>
-  <td>40</td>
-  <td>4</td>
-  <td>91.5</td>
-  <td>N</td>
-</tr>
+    <tr>
+      <th>0</th>
+      <td>293</td>
+      <td>66</td>
+      <td>1</td>
+      <td>30</td>
+      <td>29</td>
+      <td>14</td>
+      <td>1</td>
+      <td>293</td>
+      <td>66</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>315</td>
+      <td>81</td>
+      <td>7</td>
+      <td>24</td>
+      <td>38</td>
+      <td>39</td>
+      <td>14</td>
+      <td>3449</td>
+      <td>835</td>
+      <td>69</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CRuns</th>
+      <th>CRBI</th>
+      <th>CWalks</th>
+      <th>League</th>
+      <th>Division</th>
+      <th>PutOuts</th>
+      <th>Assists</th>
+      <th>Errors</th>
+      <th>Salary</th>
+      <th>NewLeague</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>30</td>
+      <td>29</td>
+      <td>14</td>
+      <td>A</td>
+      <td>E</td>
+      <td>446</td>
+      <td>33</td>
+      <td>20</td>
+      <td>NaN</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>321</td>
+      <td>414</td>
+      <td>375</td>
+      <td>N</td>
+      <td>W</td>
+      <td>632</td>
+      <td>43</td>
+      <td>10</td>
+      <td>475.0</td>
+      <td>N</td>
+    </tr>
   </tbody>
 </table>
 
@@ -204,7 +153,7 @@ Hitters = load_data('Hitters'); print(Hitters.shape); Hitters.head()
 Hitters.describe().round(1)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
 <tr style="text-align: right;">
   <th></th>
@@ -228,26 +177,6 @@ Hitters.describe().round(1)
 </tr>
   </thead>
   <tbody>
-<tr>
-  <th>count</th>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>322.0</td>
-  <td>263.0</td>
-</tr>
 <tr>
   <th>mean</th>
   <td>380.9</td>
@@ -403,14 +332,14 @@ Hitters = Hitters.dropna(); Hitters.shape
 
 (263, 20)
 
-# 3. Subset Selection Methods
+# 3. Teilmengewahlmethoden
 
 ## 3.1. Vorwärtsselektion
 
 ```python=
 design = MS(Hitters.columns.drop('Salary')).fit(Hitters)
 X = design.transform(Hitters)
-# Shape of X is 263 x 20
+# Shape of X: 263 x 20
 ```
 
 - Wir definieren die Suchstrategie mit `Stepwise()` aus `ISLP.models`:
@@ -437,8 +366,10 @@ hitters_MSE = sklearn_selected(sm.OLS, strategy).fit(Hitters, Y)
 hitters_MSE.selected_state_
 ```
 
-('Assists','AtBat','CAtBat','CHits','CHmRun','CRBI','CRuns','CWalks','Division',
-'Errors','Hits','HmRun','League','NewLeague','PutOuts','RBI','Runs','Walks','Years')
+    ('Assists', 'AtBat', 'CAtBat', 'CHits', 'CHmRun')
+    ('CRBI', 'CRuns', 'CWalks', 'Division', 'Errors')
+    ('Hits', 'HmRun', 'League', 'NewLeague', 'PutOuts')
+    ('RBI', 'Runs', 'Walks', 'Years')
 
 - Wir können $C_p$ als Kriterium zur Modellauswahl verwenden.
   - $C_p$ ist keine eingebaute `sklearn`-Metrik.
@@ -447,17 +378,17 @@ hitters_MSE.selected_state_
 
 ```python=
 def nCp(sigma2, estimator, X, Y):
-n, p = X.shape
-Yhat = estimator.predict(X)
-RSS = np.sum((Y - Yhat)**2)
-return - (RSS + 2 * p * sigma2) / n
+    n, p = X.shape
+    Yhat = estimator.predict(X)
+    RSS = np.sum((Y - Yhat)**2)
+    return - (RSS + 2 * p * sigma2) / n
 ```
 
 - Funktion `nCp` benötigt $\sigma^2$: Berechnung $\sigma^2$ aus die vollige Modell.
 - Fixierung von $\sigma^2$:
-  - mit `partial()` aus `functools`.
-  - Funktion `nCp` verwendet nur `estimator, X, Y`.
   - Weil Parameter `scoring` nur `estimator, X, Y` benötigt.
+  - mit `partial()` aus `functools`.
+  - Funktion `nCp` verwendet jetzt nur `estimator, X, Y`.
 
 ```python=
 # Compute the sigma2
@@ -473,9 +404,10 @@ hitters_Cp = sklearn_selected(sm.OLS, strategy, scoring=neg_Cp).fit(Hitters, Y)
 hitters_Cp.selected_state_
 ```
 
-('Assists','AtBat','CAtBat','CRBI','CRuns','CWalks','Division','Hits','PutOuts','Walks')
+    ('Assists', 'AtBat', 'CAtBat', 'CRBI', 'CRuns')
+    ('CWalks', 'Division', 'Hits', 'PutOuts', 'Walks')
 
-### a. Auswahl von Modellen nur mit Trainingsdaten
+### a. Auswahl von Modellen mit alle Daten als Trainingsdaten
 
 - `sklearn_selection_path()` speichert alle Modelle bei jedem Schritt.
 - Strategie mit `Stepwise.fixed_steps()`:
@@ -490,15 +422,13 @@ strategy = Stepwise.fixed_steps(model_spec=design, n_steps=len(design.terms), di
 full_path = sklearn_selection_path(sm.OLS, strategy).fit(Hitters, Y)
 # Fitted values
 Yhat_in = full_path.predict(Hitters)
-# Shape of Yhat_in is 263 x 20
+# Shape of Yhat_in: 263 x 20
 # row is fitted values, column is model
 ```
 
 - Berechnung des MSE für jedes Modell.
 - Darstellung des MSE gegen die Anzahl der Variablen pro Modell.
-  - y-Achse: MSE
-  - Skalierung: 50.000 bis 250.000
-  - Vergleich mit Cross-Validation-MSE und anderen Methoden später.
+  - Skalierung: 50.000 bis 250.000 zum vergleich mit Cross-Validation-MSE und anderen Methoden später.
 
 ```python=
 mse_fig, ax = plt.subplots(figsize=(8,8))
@@ -516,9 +446,9 @@ ax.set_ylim([50000,250000]); ax.set_xticks(range(20)); ax.legend();
 
 ![](Figures/hitters_22_0.png)
 
-### b. Auswahl von Modellen mit Cross-Validation
+### b. Auswahl von Modellen mit Kreuzvalidierung
 
-- Durchführung von 5-facher Cross-Validation für jedes Modell.
+- Durchführung von 5-facher Kreuzvalidierung für jedes Modell.
 - Verwendung von `cross_val_predict()` aus `sklearn` zur Berechnung der angepassten Werte.
 - Training auf den verbleibenden Folds, Berechnung der Werte für den ausgeschlossenen Fold.
   1. Erster Fold ausgeschlossen, Modell auf restlichen 4 Folds trainiert.
@@ -529,7 +459,7 @@ ax.set_ylim([50000,250000]); ax.set_xticks(range(20)); ax.legend();
 K = 5
 kfold = skm.KFold(K, shuffle=True, random_state=0)
 Yhat_cv = skm.cross_val_predict(full_path, Hitters, Y, cv=kfold)
-# Shape of Yhat_cv is 263 x 20
+# Shape of Yhat_cv: 263 x 20
 ```
 
 - Berechnung des MSE für jedes Modell in jedem Cross-Validation-Fold:
@@ -544,7 +474,7 @@ Yhat_cv = skm.cross_val_predict(full_path, Hitters, Y, cv=kfold)
 # Show shape of each train and test set for each fold
 for train_idx, test_idx in kfold.split(Y):
   print(test_idx[:3])
-# Shape of train_idx is always a vector of 210, of test_idx is 53
+# Shape of train_idx: 210, of test_idx: 53
 ```
 
     [ 5  7  8]
@@ -560,7 +490,7 @@ for train_idx, test_idx in kfold.split(Y):
   # Y[test_idx, None] is to make it a column vector.
   cv_mse.append(squared_errors.mean(0))
   # mean(0) is to average over the rows.
-# Shape of cv_mse is 5 x 20
+# Shape of cv_mse: 5 x 20
 ```
 
 - Plotten des mittleren MSEs gegen die Anzahl der Variablen.
@@ -624,7 +554,7 @@ ax.set_xticks(np.arange(n_steps)[::2]); ax.set_ylim([50000,250000]); ax.legend()
 
 ![](Figures/hitters_37_0.png)
 
-## 3.2. Best Subset Selection
+## 3.2. Beste Teilmengenauswahl
 
 - Forward stepwise selection: *Greedy* Methode, fügt jeweils eine Variable zum Modell hinzu.
 - Anwendung von Best Subset Selection auf `Hitters`-Daten:
@@ -644,27 +574,27 @@ X = np.asarray(D)
 path = fit_path(X, Y, max_nonzeros=X.shape[1])
 ```
 
-Preprocessing Data.
-BnB Started.
-Iteration: 1. Number of non-zeros:  1
-Iteration: 2. Number of non-zeros:  2
-Iteration: 3. Number of non-zeros:  2
-Iteration: 4. Number of non-zeros:  2
-Iteration: 5. Number of non-zeros:  3
-Iteration: 6. Number of non-zeros:  3
-Iteration: 7. Number of non-zeros:  4
-Iteration: 8. Number of non-zeros:  9
-Iteration: 9. Number of non-zeros:  9
-Iteration: 10. Number of non-zeros:  9
-Iteration: 11. Number of non-zeros:  9
-Iteration: 12. Number of non-zeros:  9
-Iteration: 13. Number of non-zeros:  9
-Iteration: 14. Number of non-zeros:  9
-Iteration: 15. Number of non-zeros:  9
-Iteration: 16. Number of non-zeros:  9
-Iteration: 17. Number of non-zeros:  9
-Iteration: 18. Number of non-zeros:  17
-Iteration: 19. Number of non-zeros:  19
+    Preprocessing Data.
+    BnB Started.
+    Iteration: 1. Number of non-zeros:  1
+    Iteration: 2. Number of non-zeros:  2
+    Iteration: 3. Number of non-zeros:  2
+    Iteration: 4. Number of non-zeros:  2
+    Iteration: 5. Number of non-zeros:  3
+    Iteration: 6. Number of non-zeros:  3
+    Iteration: 7. Number of non-zeros:  4
+    Iteration: 8. Number of non-zeros:  9
+    Iteration: 9. Number of non-zeros:  9
+    Iteration: 10. Number of non-zeros:  9
+    Iteration: 11. Number of non-zeros:  9
+    Iteration: 12. Number of non-zeros:  9
+    Iteration: 13. Number of non-zeros:  9
+    Iteration: 14. Number of non-zeros:  9
+    Iteration: 15. Number of non-zeros:  9
+    Iteration: 16. Number of non-zeros:  9
+    Iteration: 17. Number of non-zeros:  9
+    Iteration: 18. Number of non-zeros:  17
+    Iteration: 19. Number of non-zeros:  19
 
 - Modell bei Schritt 4 betrachten:
   - `'B'` hat zwei nicht-null Koeffizienten.
@@ -685,7 +615,45 @@ path[3]
 
 # 4. Ridge Regression
 
-## 4.1. Ridge Regression für ein $\lambda$
+- **Ridge Regression:**
+  - Minimiert $\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij} \right)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 = \text{RSS} + \lambda \sum_{j=1}^{p} \beta_j^2$.
+  - $\lambda \geq 0$ muss separat bestimmt werden.
+  - Zwei Kriterien:
+    - RSS klein halten.
+    - Schrumpfungsstrafe $\lambda \sum_{j} \beta_j^2$.
+  - $\lambda$ kontrolliert die Balance:
+    - $\lambda = 0$: Gleich wie Least Squares.
+    - $\lambda \to \infty$: Schätzungen nähern sich null.
+  - Verschiedene Schätzungen $\hat{\beta}^{\lambda}_R$ für jede $\lambda$.
+  - Auswahl eines guten $\lambda$ ist entscheidend.
+
+- **Schrumpfungsstrafe:**
+  - Gilt für $\beta_1, \ldots, \beta_p$, nicht für $\beta_0$.
+  - $\beta_0$ misst den Mittelwert bei $x_{i1} = x_{i2} = \ldots = x_{ip} = 0$.
+  - Bei zentrierten Daten: $\hat{\beta}_0 = \bar{y} = \sum_{i=1}^{n} y_i / n$.
+
+- **ℓ2 Norm:**
+  - Die ℓ2-Norm eines Vektors ist die Quadratwurzel der Summe der Quadrate seiner Einträge.
+  - In Ridge Regression:
+    - Die ℓ2-Norm der Ridge-Regressionskoeffizienten wird durch den Term $\sum_{j=1}^{p} \beta_j^2$ dargestellt.
+    - Diese Norm wird verwendet, um die Schrumpfungsstrafe zu berechnen.
+
+- **Warum ist Ridge Regression besser als Least Squares?**
+  - **Bias-Variance Trade-off:**
+    - $\lambda$ erhöht: Flexibilität und Varianz sinken, Bias steigt.
+
+  - **Ridge Regression vs Least Squares:**
+    - Least Squares: Niedriger Bias, hohe Varianz.
+    - Ridge Regression: Geringere Varianz, etwas höherer Bias.
+    - Bei $p \approx n$: Least Squares hat hohe Varianz.
+    - Bei $p > n$: Least Squares nicht eindeutig, Ridge Regression funktioniert gut.
+
+  - **Computationale Vorteile:**
+    - Best Subset Selection: $2^p$ Modelle, oft unpraktikabel.
+    - Ridge Regression: Ein Modell pro $\lambda$.
+    - Berechnungen für alle $\lambda$ fast identisch zu Least Squares.
+
+## 4.1. Ridge Regression für ein λ
 
 - `X` ohne Interzeptor verwenden.
 - Spalten von `X` standardisieren (Mittelwert 0, Standardabweichung 1).
@@ -750,7 +718,7 @@ skl.ridge_regression(Xs, Y, alpha=lambdas[59])
             -24.46 , -337.102,  112.513,    8.919,  420.473,  218.463,
            -204.046,   31.265,  -59.038,   78.769,   51.901,  -22.747, -12.963])
 
-## 4.2. Ridge Regression for Multiple $\lambda$
+## 4.2. Ridge Regression for Multiple λ
 
 ```python=
 # Ignore UserWarning
@@ -770,7 +738,7 @@ warnings.filterwarnings('ignore', category=UserWarning)
 ```python=
 # Fit 100 Ridge regressions with skl.ElasticNet.path
 soln_array = skl.ElasticNet.path(Xs, Y, l1_ratio=0., alphas=lambdas)[1]
-# Shape of solution soln_array is 19 x 100
+# Shape of solution soln_array: 19 x 100
 # row is coefficient, column is lambda
 # Coefficients of the second lambda
 soln_array[:,1]
@@ -1160,7 +1128,7 @@ results = skm.cross_validate(ridge, X, Y, scoring='neg_mean_squared_error',
 
     array([231788.32155285])
 
-## 4.4. Validierungssatz zur $\lambda$-Auswahl nutzen
+## 4.4. Validierungssatz zur λ-Auswahl nutzen
 
 - `GridSearchCV()` von `sklearn.model_selection` verwenden.
 - Beste $\lambda$ finden.
@@ -1189,7 +1157,7 @@ best_model.named_steps['ridge'].coef_
             127.260,   48.003,  278.299,  141.610,-173.705,   30.842,  -60.784,   78.399,
              45.043,  -24.238,  -13.827])
 
-## 4.5. $\lambda$ per Kreuzvalidierung auswählen
+## 4.5. λ per Kreuzvalidierung auswählen
 
 ```python=
 # Create k-fold cross-validation
@@ -1207,7 +1175,6 @@ grid.fit(X, Y);
 
 ```python=
 # grid.best_params shows the best lambda of 0.0119
-print(_)
 # Get the corresponding estimator
 best_model = grid.best_estimator_
 # Show the coefficients of the best model
@@ -1328,6 +1295,107 @@ results = skm.cross_validate(pipeCV, X, Y, cv=outer_valid,
     array([132393.840])
 
 # 5. The Lasso
+
+- **Nachteil von Ridge Regression:**
+  - Beinhaltet alle $p$ Prädiktoren im finalen Modell.
+  - Schrumpft Koeffizienten, setzt aber keine auf null (außer bei $\lambda = \infty$).
+  - Erschwert Modellinterpretation bei vielen Variablen.
+  - Beispiel: Credit-Datensatz – wichtige Variablen sind Einkommen, Limit, Bewertung und Student. Ridge Regression verwendet jedoch alle zehn Prädiktoren.
+
+- **Lasso Regression:**  - Minimiert $\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij} \right)^2 + \lambda \sum_{j=1}^{p} |\beta_j| = \text{RSS} + \lambda \sum_{j=1}^{p} |\beta_j|$ (6.7).
+  - Verwendet $\ell_1$-Strafe statt $\ell_2$-Strafe.
+  - $\ell_1$-Norm: $\|\beta\|_1 = \sum |\beta_j|$.
+  - **Vorteil:**
+    - Schrumpft Koeffizienten auf null bei großem $\lambda$.
+    - Führt zu variablenselektiven Modellen.
+    - Einfacher zu interpretieren als Ridge Regression.
+    - Erzeugt sparsame Modelle (nur Teilmenge der Variablen verwendet).
+
+- **Wert von $\lambda$:**
+  - Kritisch für beide Methoden.
+  - Auswahl durch Kreuzvalidierung.
+
+- **Alternativen Darstellung:**
+  - **Lasso:**
+    - Minimiert $\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij} \right)^2$.
+    - Einschränkung: $\sum_{j=1}^{p} |\beta_j| \leq s$.
+    - Kleinster RSS innerhalb eines Diamanten ($| \beta_1 | + | \beta_2 | \leq s$ bei $p = 2$).
+    - Budget $s$ bestimmt die Größe der Koeffizienten.
+  
+  - **Ridge Regression (6.9):**
+    - Minimiert $\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij} \right)^2$.
+    - Einschränkung: $\sum_{j=1}^{p} \beta_j^2 \leq s$.
+    - Kleinster RSS innerhalb eines Kreises ($\beta_1^2 + \beta_2^2 \leq s$ bei $p = 2$).
+
+- **Verbindung zu Best Subset Selection:**
+  - Problem: Minimiert $\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij} \right)^2$.
+  - Einschränkung: $\sum_{j=1}^{p} I(\beta_j \neq 0) \leq s$.
+  - $I(\beta_j \neq 0)$ ist eine Indikatorvariable (1 wenn $\beta_j \neq 0$, sonst 0).
+  - Ziel: Kleinster RSS mit maximal $s$ nicht-null Koeffizienten.
+  - Best Subset Selection ist rechnerisch aufwendig bei großen $p$.  
+- **Lasso und Ridge Regression als Alternativen:**
+  - Ersetzbar durch Lasso und Ridge Regression für einfachere Berechnungen.
+  - Lasso ähnelt Best Subset Selection mehr, da es Feature Selection durchführt.
+  - Ridge Regression führt keine Feature Selection durch.
+
+- **Die Variableauswahl-Eigenschaft des Lasso:*
+  - **Warum Lasso vs. Ridge Regression?**
+    - Lasso führt zu Koeffizienten, die genau null sind, Ridge Regression nicht.
+    - Figur 6.7 zeigt die Unterschiede. $\hat{\beta}$ ist die Least Squares-Lösung.
+    - Lasso- und Ridge-Regression-Einschränkungen sind durch blaue Diamanten und Kreise dargestellt.
+    - Große $s$-Werte enthalten $\hat{\beta}$, und die Schätzungen sind gleich den Least Squares-Schätzungen.
+  - **Ellipsen und Einschränkungen**
+    - Ellipsen um $\hat{\beta}$ repräsentieren RSS-Konturen.
+    - Lasso und Ridge Regression Schätzungen sind der Punkt, an dem eine Ellipse die Einschränkung zuerst berührt.
+    - Ridge Regression hat keine scharfen Ecken, daher sind die Koeffizienten nicht null.
+    - Lasso hat Ecken an den Achsen, daher können einige Koeffizienten null sein.
+  - **Höhere Dimensionen**
+    - Für $p = 3$ ist die Einschränkung für Ridge Regression eine Kugel, für Lasso ein Polyeder.
+    - Für $p > 3$ wird Ridge Regression zu einer Hypersphäre und Lasso zu einem Polytop.
+    - Lasso führt zu Feature-Auswahl aufgrund der scharfen Ecken.
+
+- **Vergleich von Lasso und Ridge Regression:**
+  - **Vorteile von Lasso**
+    - Einfachere und interpretierbarere Modelle durch Auswahl einer Teilmenge der Prädiktoren.
+    - Reduziert die Varianz, erhöht aber den Bias, ähnlich wie Ridge Regression.  
+  - **Vorhersagegenauigkeit**
+    - Figur 6.8 zeigt Varianz, Bias und MSE von Lasso und Ridge Regression.
+    - Ridge Regression hat etwas niedrigere Varianz und minimalere MSE als Lasso.
+    - Lasso outperformt Ridge Regression, wenn nur wenige Prädiktoren relevant sind.
+  - **Allgemeine Anwendung**
+    - Weder Lasso noch Ridge Regression dominiert immer.
+    - Lasso performt besser bei wenigen relevanten Prädiktoren.
+    - Ridge Regression performt besser bei vielen Prädiktoren ähnlicher Größe.
+    - Cross-Validation kann helfen, die beste Methode zu bestimmen.
+  - **Interpretierbarkeit und Effizienz**
+    - Lasso führt zu variablen Auswahlmodellen, die leichter zu interpretieren sind.
+    - Effiziente Algorithmen existieren für beide Methoden.
+
+- **Einfache Spezialfälle:**
+  - **Ridge Regression und Lasso**
+    - Betrachte $n = p$ und $X$ als diagonale Matrix.
+    - Least Squares-Lösung: $\hat{\beta}_j = y_j$.
+    - Ridge Regression: Minimiert $\sum (y_j - \beta_j)^2 + \lambda \sum \beta_j^2$.
+    - Lasso: Minimiert $\sum (y_j - \beta_j)^2 + \lambda \sum |\beta_j|$.
+  - **Schätzungen**
+    - Ridge Regression: $\hat{\beta}^R_j = \frac{y_j}{1 + \lambda}$.
+    - Lasso: $\hat{\beta}^L_j = \begin{cases} y_j - \lambda/2 & \text{if } y_j > \lambda/2 \\ y_j + \lambda/2 & \text{if } y_j < -\lambda/2 \\ 0 & \text{if } |y_j| \leq \lambda/2 \end{cases}$.
+  - **Schrumpfung**
+    - Ridge Regression schrumpft alle Koeffizienten gleichmäßig.
+    - Lasso schrumpft Koeffizienten um einen konstanten Betrag $\lambda/2$; kleine Koeffizienten werden zu null.
+
+- **Bayesianische Interpretation:**
+  - **Bayesianische Sichtweise**
+    - Ridge Regression und Lasso können durch bayesianische Prioren interpretiert werden.
+    - Ridge Regression: Prior ist eine normale Verteilung.
+    - Lasso: Prior ist eine doppelt-exponentielle Verteilung.
+  - **Posterior-Modi**
+    - Ridge Regression-Lösung ist der Posterior-Modus bei normaler Prior.
+    - Lasso-Lösung ist der Posterior-Modus bei doppelt-exponentieller Prior.
+  - **Prior-Formen**
+    - Gaussian-Prior ist flacher und breiter bei null.
+    - Lasso-Prior ist steil bei null, erwartet viele Koeffizienten als null.
+
 
 ```python=
 # Use skl.ElasticNetCV() with l1_ratio=1
@@ -1956,6 +2024,48 @@ tuned_lasso.coef_
 
 # 6. Hauptkomponentenregression
 
+- **Dimension Reduction Methods**
+  - Verwendung von transformierten Prädiktoren
+  - Anpassung eines Kleinste-Quadrate-Modells mit transformierten Variablen
+
+- **Definition von Transformierten Prädiktoren**
+  - $Z_1, Z_2, \ldots, Z_M$ sind lineare Kombinationen der originalen Prädiktoren $X_1, X_2, \ldots, X_p$
+  - Berechnung: $Z_m = \sum_{j=1}^{p} \phi_{jm} X_j$
+
+- **Lineares Regressionsmodell**
+  - Modell: $y_i = \theta_0 + \sum_{m=1}^{M} \theta_m z_{im} + \epsilon_i$
+  - Reduzierung der Dimension von $p + 1$ auf $M + 1$
+
+- **Nutzen der Dimension Reduktion**
+  - Reduziert Varianz der geschätzten Koeffizienten
+  - Besser bei großen $p$ im Verhältnis zu $n$
+  - Kein Dimension Reduction bei $M = p$ und linearen Unabhängigkeit der $Z_m$
+
+- **Schritte der Dimension Reduktion**
+  - 1. Transformation der Prädiktoren zu $Z_1, Z_2, \ldots, Z_M$
+  - 2. Anpassung des Modells mit diesen $M$ Prädiktoren
+
+- **Principal Components Regression (PCR)**
+  - Konstruktion der ersten $M$ Hauptkomponenten $Z_1, \ldots, Z_M$
+  - Verwendung dieser Komponenten im linearen Regressionsmodell
+
+- **Vorteile von PCR**
+  - Kleine Anzahl von Hauptkomponenten kann meiste Variabilität erklären
+  - Vermeidung von Überanpassung durch Schätzung von nur $M \ll p$ Koeffizienten
+
+- **Beispiel und Ergebnisse**
+  - Verwendung von PCR in simulierten Datensätzen
+  - Abnahme des Bias und Zunahme der Varianz mit steigender Anzahl der Hauptkomponenten
+  - Verbesserung gegenüber Kleinste-Quadrate-Anpassung vor allem bei geringem $M$
+
+- **Einschränkungen von PCR**
+  - Keine Merkmalsselektion, da jede Hauptkomponente eine lineare Kombination aller ursprünglichen Merkmale ist
+  - Ähnlichkeit zu Ridge Regression
+
+- **Kreuzvalidierung und Standardisierung**
+  - Wahl der Anzahl der Hauptkomponenten $M$ durch Kreuzvalidierung
+  - Standardisierung der Prädiktoren empfohlen, um gleiche Skala zu gewährleisten
+
 ```python=
 pca = PCA(n_components=2)
 linreg = skl.LinearRegression()
@@ -2054,6 +2164,43 @@ cv_null = skm.cross_validate(linreg, Xn, Y, cv=kfold,
 
 # 7. Regression der partiellen kleinsten Quadrate
 
+- **Principal Components Regression (PCR)**
+  - Identifiziert lineare Kombinationen der Prädiktoren $X_1, \ldots, X_p$.
+  - Unüberwachte Methode: Die Antwort $Y$ wird nicht zur Bestimmung der Hauptkomponenten verwendet.
+  - Nachteil: Richtungen, die die Prädiktoren am besten erklären, sind nicht unbedingt die besten für die Vorhersage der Antwort.
+
+- **Partial Least Squares (PLS)**
+  - Überwachte Alternative zu PCR.
+  - Reduziert Dimensionen und identifiziert neue Merkmale $Z_1, \ldots, Z_M$, die lineare Kombinationen der ursprünglichen Merkmale sind.
+  - Nutzt die Antwort $Y$, um neue Merkmale zu identifizieren, die sowohl die Prädiktoren als auch die Antwort gut erklären.
+
+- **Berechnung der ersten PLS-Richtung**
+  - Standardisierung der $p$ Prädiktoren.
+  - Berechnung der ersten Richtung $Z_1$ durch Setzen jedes $\phi_{j1}$ gleich dem Koeffizienten der einfachen linearen Regression von $Y$ auf $X_j$.
+  - $\phi_{j1}$ ist proportional zur Korrelation zwischen $Y$ und $X_j$.
+  - Höchstes Gewicht auf Variablen, die am stärksten mit der Antwort korrelieren.
+
+- **Beispiel**
+  - PLS auf synthetischen Daten mit Sales als Antwort und zwei Prädiktoren: Population Size und Advertising Spending.
+  - Erste PLS-Richtung zeigt weniger Veränderung in der Advertising Dimension pro Einheit Veränderung in der Population Dimension im Vergleich zu PCA.
+  - Suggests higher correlation of Population with the response compared to Advertising.
+
+- **Identifikation der zweiten PLS-Richtung**
+  - Anpassung jeder Variablen für $Z_1$ durch Regression und Residuenbildung.
+  - Berechnung von $Z_2$ unter Verwendung der orthogonalisierten Daten.
+  - Wiederholung dieses Ansatzes $M$ Mal zur Identifikation mehrerer PLS-Komponenten $Z_1, \ldots, Z_M$.
+  - Anwendung der kleinsten Quadrate zur Vorhersage von $Y$ mit $Z_1, \ldots, Z_M$.
+
+- **Anzahl der PLS-Richtungen (M)**
+  - Tuning-Parameter, typischerweise durch Kreuzvalidierung gewählt.
+  - Standardisierung der Prädiktoren und der Antwort vor der Durchführung von PLS empfohlen.
+
+- **Praktische Anwendung**
+  - Beliebt in der Chemometrie.
+  - Performt oft nicht besser als Ridge Regression oder PCR.
+  - Reduktion des Bias durch überwachtes Dimension Reduction, aber potenzielle Erhöhung der Varianz.
+
+**ANWENDUNG**
 - `n_components` gibt die Anzahl der latenten Variablen an.
 - Die Anzahl der Koeffizienten entspricht der Anzahl der Merkmale in den Eingabedaten X, nicht der Anzahl der Komponenten.
 
@@ -2112,3 +2259,33 @@ best_pls.coef_
            [-9.474, -0.069,  0.224,  0.967,  0.782,  0.361],
            [-0.742, 47.789, -121.742,  0.283,  0.316, -2.627],
            [-15.132]])
+
+# 8. Betrachtungen bei hoher Dimension
+
+- **a. Hochdimensionale Daten**
+  - Traditionelle statistische Techniken sind für niedrige Dimensionen gedacht ($n \gg p$).
+  - Neue Technologien haben die Datenerhebung verändert; oft ist $p$ sehr groß, aber $n$ ist begrenzt.
+  - Beispiele:
+    - Vorhersage des Blutdrucks mit 500.000 SNPs und $n \approx 200$.
+    - Analyse von Online-Einkaufsverhalten mit vielen Suchbegriffen und $n \approx 1.000$.
+
+- **b. Probleme bei hoher Dimension**
+  - Klassische Methoden wie die Kleinste-Quadrate-Regression sind ungeeignet, wenn $p \geq n$.
+  - Überanpassung: Perfekte Anpassung an Trainingsdaten, aber schlechte Leistung bei Testdaten.
+  - Beispiel:
+    - Bei $n = 20$ und $p = 1$ passt die Regression nicht perfekt.
+    - Bei $n = 2$ und $p = 1$ passt die Regression perfekt, was zu Überanpassung führt.
+  - $R^2$ und Trainings-MSE sind irreführend; Test-MSE zeigt wahre Modellqualität.
+
+- **c. Regression bei hoher Dimension**
+  - Techniken wie Vorwärtsauswahl, Ridge-Regression, Lasso und Hauptkomponenten-Regression sind nützlich.
+  - Beispiel Lasso:
+    - Bei $p = 20, 50, 2.000$ und $n = 100$ zeigt die Test-MSE die Bedeutung der Regularisierung.
+    - Höhere Dimensionen führen zu höherem Testfehler, wenn zusätzliche Merkmale nicht relevant sind.
+  - „Fluch der Dimensionalität“: Mehr Merkmale führen nicht immer zu besseren Modellen.
+
+- **d. Interpretation der Ergebnisse bei hoher Dimension**
+  - Multikollinearität ist extrem; keine eindeutigen prädiktiven Variablen.
+  - Beispiel SNPs und Blutdruck:
+    - Vorwärtsauswahl wählt 17 SNPs, aber andere Sets könnten ebenfalls gut sein.
+    - Ergebnisse sollten nicht überbewertet werden; weitere Validierung notwendig.

@@ -1,3 +1,8 @@
+---
+title: "Carseats"
+author: "db"
+---
+
 # 1. Datenbeschreibung
 - Simulierte Daten zu Autokindersitz-Verkäufen in 400 Geschäften:
     - 400 Zeilen
