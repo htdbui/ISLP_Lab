@@ -3,7 +3,6 @@ title: "Wage "
 author: "db"
 ---
 
-# Bookmarked Wage
 # 1. Datenbeschreibung
 - Daten von 3000 männlichen Arbeitern aus der Mid-Atlantic-Region.
   - 3000 Zeilen
@@ -74,11 +73,6 @@ WageDF.head()
       <th>race</th>
       <th>education</th>
       <th>region</th>
-      <th>jobclass</th>
-      <th>health</th>
-      <th>health_ins</th>
-      <th>logwage</th>
-      <th>wage</th>
     </tr>
   </thead>
   <tbody>
@@ -90,11 +84,6 @@ WageDF.head()
       <td>1. White</td>
       <td>1. &lt; HS Grad</td>
       <td>2. Middle Atlantic</td>
-      <td>1. Industrial</td>
-      <td>1. &lt;=Good</td>
-      <td>2. No</td>
-      <td>4.318063</td>
-      <td>75.043154</td>
     </tr>
     <tr>
       <th>1</th>
@@ -104,6 +93,32 @@ WageDF.head()
       <td>1. White</td>
       <td>4. College Grad</td>
       <td>2. Middle Atlantic</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>jobclass</th>
+      <th>health</th>
+      <th>health_ins</th>
+      <th>logwage</th>
+      <th>wage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1. Industrial</td>
+      <td>1. &lt;=Good</td>
+      <td>2. No</td>
+      <td>4.318063</td>
+      <td>75.043154</td>
+    </tr>
+    <tr>
+      <th>1</th>
       <td>2. Information</td>
       <td>2. &gt;=Very Good</td>
       <td>2. No</td>
@@ -1761,6 +1776,7 @@ axs[1].set_xlabel('age'); axs[1].set_title('Natural spline');
       $RSS_{cv}(\lambda) = \sum_{i=1}^{n} \left[ \frac{y_i - \hat{g}_{\lambda}(x_i)}{1 - \{S_{\lambda}\}_{ii}} \right]^2$.
 
 **ANWENDUNG**
+
 - Smoothing Spline
   - Spezifischer Typ des Generalized Additive Model (GAM)
   - Verwendet quadratischen Fehler für ein Merkmal
