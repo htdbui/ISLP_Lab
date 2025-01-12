@@ -571,7 +571,7 @@ anova_lm(lin_reg1, lin_reg2, lin_reg3, lin_reg4, lin_reg5)
 
 - Alternativ zu ANOVA:
   - `poly()` generiert orthogonale Polynome
-  - Prädiktoren in `poly_age.transform(Wage)` sind unkorreliert 
+  - Prädiktoren sind unkorreliert 
   - Einfachere Bestimmung der p-Werte
 
 ```python=
