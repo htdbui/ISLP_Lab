@@ -4,17 +4,17 @@ author: "db"
 ---
 
 # 1. Datenbeschreibung
-- Simulierte Daten zu Autokindersitz-Verk‰ufen in 400 Gesch‰ften:
+- Simulierte Daten zu Autokindersitz-Verk√§ufen in 400 Gesch√§ften:
     - 400 Zeilen
     - 11 Variablen:
         - Sales: Verkaufszahlen (in Tausend)
         - CompPrice: Preis des Konkurrenten
         - Income: Einkommensniveau der Gemeinschaft (in Tausend Dollar)
         - Advertising: Werbebudget vor Ort (in Tausend Dollar)
-        - Population: Bevˆlkerungsgrˆﬂe in der Region (in Tausend)
-        - Price: Firmenpreis f¸r Kindersitze
-        - ShelveLoc: Qualit‰t des Regals (Bad, Good, Medium)
-        - Age: Durchschnittsalter der Bevˆlkerung
+        - Population: Bev√∂lkerungsgr√∂√üe in der Region (in Tausend)
+        - Price: Firmenpreis f√ºr Kindersitze
+        - ShelveLoc: Qualit√§t des Regals (Bad, Good, Medium)
+        - Age: Durchschnittsalter der Bev√∂lkerung
         - Education: Bildungsstand
         - Urban: Stadt- oder Landlage (No, Yes)
         - US: In den USA oder nicht (No, Yes)
@@ -184,18 +184,18 @@ Carseats.describe().round(1)
   </tbody>
 </table>
 
-# 3. Klassifikationsb‰ume
+# 3. Klassifikationsb√§ume
 
 - Klassifikationsbaum:
   - Prognostiziert qualitative Antworten.
-  - ƒhnlich wie Regressionsbaum, aber f¸r Klassen.
+  - √Ñhnlich wie Regressionsbaum, aber f√ºr Klassen.
 
 - Klassifikationsbaum vs. Regressionsbaum:
   - Regressionsbaum: Vorhersage durch Mittelwert der Trainingsbeobachtungen.
-  - Klassifikationsbaum: Vorhersage durch h‰ufigste Klasse der Trainingsbeobachtungen.
+  - Klassifikationsbaum: Vorhersage durch h√§ufigste Klasse der Trainingsbeobachtungen.
 
 - Klassifikationsbaum erstellen:
-  - Nutzen rekursives bin‰res Teilen.
+  - Nutzen rekursives bin√§res Teilen.
   - Klassifikationsfehlerrate als Kriterium:
     - Fehlerquote: $E = 1 - \max_k {\hat{p}}_{mk}$.
     - ${\hat{p}}_{mk}$: Anteil der Trainingsbeobachtungen in Klasse k.
@@ -209,22 +209,22 @@ Carseats.describe().round(1)
 - Beispiel (Abbildung 8.6):
   - Heart-Datensatz mit 303 Patienten.
   - Binary Outcome: Herzkrankheit (Yes/No).
-  - 13 Pr‰diktoren: Alter, Geschlecht, Cholesterin, etc.
+  - 13 Pr√§diktoren: Alter, Geschlecht, Cholesterin, etc.
   - Kreuzvalidierung ergibt Baum mit 6 Endknoten.
 
-- Qualitative Pr‰diktoren:
-  - Entscheidungsb‰ume auch mit qualitativen Pr‰diktoren mˆglich.
+- Qualitative Pr√§diktoren:
+  - Entscheidungsb√§ume auch mit qualitativen Pr√§diktoren m√∂glich.
   - Beispiel: "Thal" und "ChestPain" im Heart-Datensatz.
 
 - Node Purity:
-  - Split erhˆht Knotenreinheit.
-  - Wichtig f¸r genaue Vorhersagen.
-  - Beispiel: Split "RestECG<1" am Baumende erhˆht Reinheit, obwohl Vorhersage gleich bleibt.
+  - Split erh√∂ht Knotenreinheit.
+  - Wichtig f√ºr genaue Vorhersagen.
+  - Beispiel: Split "RestECG<1" am Baumende erh√∂ht Reinheit, obwohl Vorhersage gleich bleibt.
 
 ## 3.1. Baum erstellen
 
-- Erstellen der bin‰ren Variable `High`
-  - `High` zeigt an, ob der Umsatz grˆﬂer als 8 ist.
+- Erstellen der bin√§ren Variable `High`
+  - `High` zeigt an, ob der Umsatz gr√∂√üer als 8 ist.
 
 ```python=
 #High = Carseats.Sales > 8
@@ -239,12 +239,12 @@ feature_names = Design_Matrix.columns
 X = np.asarray(Design_Matrix)
 ```
 
-- Argumente f¸r die `DecisionTreeClassifier` Funktion:
-  - `criterion`: Funktion zur Messung der Split-Qualit‰t (Standard: `gini`)
+- Argumente f√ºr die `DecisionTreeClassifier` Funktion:
+  - `criterion`: Funktion zur Messung der Split-Qualit√§t (Standard: `gini`)
   - `max_depth`: Maximale Tiefe des Baums (Standard: `None`)
-  - `min_samples_split`: Minimale Anzahl von Samples f¸r einen Split (Standard: `2`)
+  - `min_samples_split`: Minimale Anzahl von Samples f√ºr einen Split (Standard: `2`)
   - `min_samples_leaf`: Minimale Anzahl von Samples in einem Blattknoten (Standard: `1`)
-  - `random_state`: Seed f¸r den Zufallsgenerator beim Mischen der Daten (Standard: `None`)
+  - `random_state`: Seed f√ºr den Zufallsgenerator beim Mischen der Daten (Standard: `None`)
 
 ```python=
 # Fit a decision tree
@@ -252,11 +252,11 @@ TRE_clas = DTC(criterion='entropy', max_depth=3, random_state=0)
 TRE_clas.fit(X, High);
 ```
 
-- Das Buch beschreibt, wie qualitative Merkmale in Entscheidungsb‰umen nat¸rlich behandelt werden:
+- Das Buch beschreibt, wie qualitative Merkmale in Entscheidungsb√§umen nat√ºrlich behandelt werden:
   - Aufteilung der Levels in zwei Gruppen.
 - sklearn's Implementierung:
   - Behandelt One-Hot-Encoded Levels als separate Variablen.
-- Modellgenauigkeit ¸berpr¸fen.
+- Modellgenauigkeit √ºberpr√ºfen.
 
 ```python=
 accuracy_score(High, TRE_clas.predict(X))
@@ -266,12 +266,12 @@ accuracy_score(High, TRE_clas.predict(X))
 
 - Standardargumente:
   - Trainingsfehlerquote: 21%
-- Klassifikationsb‰ume:
+- Klassifikationsb√§ume:
   - Nutzung von `log_loss()` zur Bestimmung des Deviance-Werts
   - Formel: $-2 \sum_m \sum_k n_{mk} \log \hat{p}_{mk}$
     - $n_{mk}$: Anzahl der Beobachtungen im m-ten Endknoten der k-ten Klasse
 - Zusammenhang:
-  - Deviance ‰hnelt der im Buch definierten *Entropie*
+  - Deviance √§hnelt der im Buch definierten *Entropie*
   - Kleine Deviance deutet auf gute Anpassung an Trainingsdaten hin
 
 ```python=
@@ -288,7 +288,7 @@ plot_tree(TRE_clas, feature_names=feature_names, ax=ax);
 
 ![](Figures/carseats_17_0.png)
 
-- Wichtiger Indikator f¸r `Sales`: `ShelveLoc`
+- Wichtiger Indikator f√ºr `Sales`: `ShelveLoc`
 - Baum im Textformat drucken:
   - Verwenden von `export_text()`
 - Beobachtungsanzahl in jedem Knoten anzeigen:
@@ -337,7 +337,7 @@ results['test_score']
     array([0.685])
 
 - Ergebnis der Prozedur:
-  - Korrekte Vorhersage f¸r 68,5% der Beobachtungen im Validierungsset.
+  - Korrekte Vorhersage f√ºr 68,5% der Beobachtungen im Validierungsset.
 
 ## 3.2. Baum beschneiden
 
@@ -362,8 +362,8 @@ accuracy_score(High_test, TRE_clas.predict(X_test))
 
 - Baum ohne maximale Tiefe neu anpassen:
   - Ergebnis: 73,5% korrekte Vorhersagen im Testset
-- N‰chster Schritt:
-  - Nutzung von `cost_complexity_pruning_path()` aus `TRE_clas` zur Ermittlung der Kostenkomplexit‰tswerte
+- N√§chster Schritt:
+  - Nutzung von `cost_complexity_pruning_path()` aus `TRE_clas` zur Ermittlung der Kostenkomplexit√§tswerte
 
 ```python=
 ccp_path = TRE_clas.cost_complexity_pruning_path(X_train, High_train)
@@ -384,12 +384,12 @@ ccp_path
 - Ergebnis:
   - Verunreinigungen und $\alpha$-Werte optimierbar durch Kreuzvalidierung
 - CCP alphas:
-  - Effektive Komplexit‰tsparameter zum Beschneiden eines Entscheidungsbaums
-  - Aufgelistet von klein bis groﬂ
+  - Effektive Komplexit√§tsparameter zum Beschneiden eines Entscheidungsbaums
+  - Aufgelistet von klein bis gro√ü
   - Jede $\alpha$ entspricht einer anderen beschnittenen Version des Baums
 - Verunreinigungen:
-  - Gesamtverunreinigungen der Bl‰tter nach dem Beschneiden mit ccp_alpha
-- Kostenkomplexit‰t:
+  - Gesamtverunreinigungen der Bl√§tter nach dem Beschneiden mit ccp_alpha
+- Kostenkomplexit√§t:
   - Kombination aus Baumverunreinigung und Knotenzahl
 
 ```python=
@@ -470,20 +470,20 @@ confusion_table(grid.best_estimator_.predict(X_test), High_test)
 
 - Aktuelle Klassifizierung:
   - 72,0% der Testbeobachtungen korrekt
-  - Etwas schlechter als der vollst‰ndige Baum mit 35 Bl‰ttern
+  - Etwas schlechter als der vollst√§ndige Baum mit 35 Bl√§ttern
 - Kreuzvalidierung:
   - Keine signifikante Verbesserung
-  - Nur 5 Bl‰tter beschnitten, Fehler erhˆht
+  - Nur 5 Bl√§tter beschnitten, Fehler erh√∂ht
 - Hinweis:
-  - Ergebnisse kˆnnen mit verschiedenen Zufallszahlen variieren
+  - Ergebnisse k√∂nnen mit verschiedenen Zufallszahlen variieren
   - Kreuzvalidierung hat gewisse Varianz
 
-# 4. Klassifikationsb‰ume mit verschiedenen Labels
+# 4. Klassifikationsb√§ume mit verschiedenen Labels
 
 - Obige Fall:
   - Labels: "Yes" und "No"
   - Kodierung: No=0, Yes=1
-- N‰chster Fall:
+- N√§chster Fall:
   - Labels: "High_Sales" und "Low_Sales"
   - Kodierung: High_Sales=0, Low_Sales=1
 
@@ -503,8 +503,8 @@ accuracy_score(High_test, TRE_clas.predict(X_test))
     0.735
 
 - Baum ohne maximale Tiefe neu anpassen:
-  - Ergebnis: ƒhnlich wie zuvor
-- Kostenkomplexit‰tswerte ermitteln:
+  - Ergebnis: √Ñhnlich wie zuvor
+- Kostenkomplexit√§tswerte ermitteln:
   - Nutzung von `cost_complexity_pruning_path()` aus `TRE_clas`
 
 ```python=
@@ -584,32 +584,32 @@ confusion_table(grid.best_estimator_.predict(X_test), High_test)
   </tbody>
 </table>
 
-# 5. B‰ume vs. Lineare Modelle
+# 5. B√§ume vs. Lineare Modelle
 
 - Regression und Klassifikation:
-  - B‰ume und lineare Modelle unterscheiden sich stark.
+  - B√§ume und lineare Modelle unterscheiden sich stark.
   - Lineare Regression: $f(X) = \beta_0 + \sum_{j=1}^{p}{X_j\beta_j}$ (Gleichung 8.8)
-  - Regressionsb‰ume: $f(X) = \sum_{m=1}^{M}{c_m\ 1_{(X\in R_m)}}$ (Gleichung 8.9)
+  - Regressionsb√§ume: $f(X) = \sum_{m=1}^{M}{c_m\ 1_{(X\in R_m)}}$ (Gleichung 8.9)
 
 - Modellwahl:
-  - Lineares Modell funktioniert gut bei linearen Zusammenh‰ngen.
-  - Entscheidungsb‰ume sind besser bei komplexen, nicht-linearen Beziehungen.
-  - Leistung durch Kreuzvalidierung oder Validierungsset sch‰tzen.
+  - Lineares Modell funktioniert gut bei linearen Zusammenh√§ngen.
+  - Entscheidungsb√§ume sind besser bei komplexen, nicht-linearen Beziehungen.
+  - Leistung durch Kreuzvalidierung oder Validierungsset sch√§tzen.
 
-- Weitere ‹berlegungen:
-  - B‰ume bieten bessere Interpretierbarkeit und Visualisierung.
+- Weitere √úberlegungen:
+  - B√§ume bieten bessere Interpretierbarkeit und Visualisierung.
 
-## Vor- und Nachteile von Entscheidungsb‰umen
+## Vor- und Nachteile von Entscheidungsb√§umen
 
 - Vorteile:
-  - Einfach zu erkl‰ren.
-  - N‰her an menschlicher Entscheidungsfindung.
-  - Grafisch darstellbar und leicht verst‰ndlich.
-  - Handhaben qualitative Pr‰diktoren ohne Dummy-Variablen.
+  - Einfach zu erkl√§ren.
+  - N√§her an menschlicher Entscheidungsfindung.
+  - Grafisch darstellbar und leicht verst√§ndlich.
+  - Handhaben qualitative Pr√§diktoren ohne Dummy-Variablen.
 
 - Nachteile:
   - Geringere Vorhersagegenauigkeit.
-  - Nicht robust; kleine Daten‰nderungen f¸hren zu groﬂen Baum‰nderungen.
+  - Nicht robust; kleine Daten√§nderungen f√ºhren zu gro√üen Baum√§nderungen.
 
 - Verbesserung der Leistung:
-  - Aggregation vieler B‰ume (Bagging, Random Forests, Boosting).
+  - Aggregation vieler B√§ume (Bagging, Random Forests, Boosting).

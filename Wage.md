@@ -1767,8 +1767,8 @@ axs[1].set_xlabel('age'); axs[1].set_title('Natural spline');
   - Minimierende Funktion ist ein natürlicher kubischer Spline.
 
 - Wahl des Smoothing Parameters λ
-  - $\lambda$ beeinflusst effektive Freiheitsgrade ${df}_λ$.
-  - ${df}_λ$ variiert von $n$ (flexibel) bis 2 (glatt).
+  - $\lambda$ beeinflusst effektive Freiheitsgrade ${df}_\lambda$.
+  - ${df}_\lambda$ variiert von $n$ (flexibel) bis 2 (glatt).
 
 - Kreuzvalidierung
   - Wähle $\lambda$ durch Minimierung des kreuzvalidierten RSS.

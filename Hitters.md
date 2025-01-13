@@ -1,5 +1,3 @@
-# Hitters
-
 ---
 title: "Hitters"
 author: "db"
@@ -646,7 +644,7 @@ path[3]
     - Least Squares: Niedriger Bias, hohe Varianz.
     - Ridge Regression: Geringere Varianz, etwas höherer Bias.
     - Bei $p \approx n$: Least Squares hat hohe Varianz.
-    - Bei $p > n$: Least Squares nicht eindeutig, Ridge Regression funktioniert gut.
+    - Bei $p > n$ : Least Squares nicht eindeutig, Ridge Regression funktioniert gut.
 
   - **Computationale Vorteile:**
     - Best Subset Selection: $2^p$ Modelle, oft unpraktikabel.
@@ -1338,7 +1336,7 @@ results = skm.cross_validate(pipeCV, X, Y, cv=outer_valid,
   - Lasso ähnelt Best Subset Selection mehr, da es Feature Selection durchführt.
   - Ridge Regression führt keine Feature Selection durch.
 
-- **Die Variableauswahl-Eigenschaft des Lasso:*
+- **Die Variableauswahl-Eigenschaft des Lasso:**
   - **Warum Lasso vs. Ridge Regression?**
     - Lasso führt zu Koeffizienten, die genau null sind, Ridge Regression nicht.
     - Figur 6.7 zeigt die Unterschiede. $\hat{\beta}$ ist die Least Squares-Lösung.
