@@ -1337,13 +1337,13 @@ summarize(sm.OLS(WageDF.wage, ageNoBSDF).fit())
 BSpline(df=6).fit(WageDF.age).internal_knots_
 ```
 
-    array([33.75, 42, 51])
+	array([33.75, 42, 51])
 
 ```python=
 BSpline(df=3, degree=0).fit(WageDF.age).internal_knots_
 ```
 
-    array([33.75, 42, 51])
+	array([33.75, 42, 51])
 
 ```python=
 # Create the matrix of basis functions
