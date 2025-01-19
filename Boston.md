@@ -4,6 +4,7 @@ author: "db"
 ---
 
 # 1. Datenbeschreibung
+
 - Datensatz enthält Wohnungswerte in 506 Vororten von Boston.
 - 13 Variablen:
   - **crim**: Kriminalitätsrate.
@@ -240,56 +241,75 @@ Boston.describe().round(1)
 # 3. Regressionsbäume
 
 ## 3.1. Theorie
+
 - **Schritt 1: Prädiktorraum aufteilen**
+  
   - Prädiktorraum ($X_1, X_2, \ldots , X_p$) in J Regionen ($R_1, R_2, \ldots , R_J$) aufteilen.
   - Gleiche Vorhersage in jeder Region $R_j$, basierend auf dem Mittelwert der Antwortwerte der Trainingsdaten.
+
 - **Beispiel**
+  
   - Zwei Regionen $R_1$ und $R_2$:
     - Mittelwert in $R_1$: 10
     - Mittelwert in $R_2$: 20
   - Vorhersage für $x$:
     - $x \in R_1$: Vorhersage 10
     - $x \in R_2$: Vorhersage 20
+
 - **Regionen konstruieren**
+  
   - Regionen als hochdimensionale Rechtecke (Boxen) definieren.
   - Ziel: RSS minimieren: $\sum_{j=1}^{J} \sum_{i \in R_j} (y_i - \hat{y}_{R_j})^2$.
   - Ansatz: Rekursive binäre Teilung (top-down, gierig).
+
 - **Rekursive binäre Teilung**
+  
   - Prädiktor $X_j$ und Schnittpunkt $s$ wählen, um den Prädiktorraum in $\{X \mid X_j < s\}$ und $\{X \mid X_j \geq s\}$ aufzuteilen.
   - Suche $j$ und $s$, die den RSS minimieren: $\sum_{i: x_i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 + \sum_{i: x_i \in R_2(j,s)} (y_i - \hat{y}_{R_2})^2$.
+
 - **Prozess wiederholen**
+  
   - Besten Prädiktor und Schnittpunkt finden, um Daten weiter zu teilen und RSS zu minimieren.
   - Teile eine der identifizierten Regionen auf.
   - Fortsetzen, bis ein Abbruchkriterium erreicht ist (z.B. keine Region enthält mehr als fünf Beobachtungen).
+
 - **Vorhersage**
+  
   - Antwort für Testbeobachtung basierend auf dem Mittelwert der Trainingsbeobachtungen in der entsprechenden Region vorhersagen.
 
 - **Problem: Überanpassung**
+  
   - Große Bäume passen sich gut an Trainingsdaten an.
   - Überanpassung führt zu schlechter Performance bei Testdaten.
 
 - **Lösung: Kleinere Bäume**
+  
   - Kleinere Bäume reduzieren Varianz und verbessern die Interpretation.
   - Risiko: kleinere Bäume könnten wichtige Strukturen übersehen.
 
 - **Strategie: Pruning**
+  
   - Großen Baum $T_0$ wachsen lassen.
   - Baum zurückschneiden (Pruning), um einen optimalen Subbaum zu erhalten.
 
 - **Ziel: Fehler minimieren**
+  
   - Subbaum wählen, der den geringsten Testfehler hat.
   - Testfehler schätzen durch Kreuzvalidierung oder Validierungsansatz.
 
 - **Kostenkomplexitäts-Pruning**
+  
   - Sequenz von Bäumen durch Tuning-Parameter $\alpha$ indexieren.
-  - Für jedes $\alpha$ Subbaum $T \subset T_0$ finden, der $\sum_{m=1}^{|T|} \sum_{i: x_i \in R_m} (y_i - \hat{y}_{R_m})^2 + \alpha |T|$ minimiert.
+  - Für jedes $\alpha$ Subbaum $T \subset T_0$ finden, der $\sum_{m=1}^{|T|} \sum_{i: x_i \in R_m} (y_i - \hat{y}_{R_m})^2 + \alpha |T|$ minimiert. $T$ ist die Anzahl der terminal nodes - Endknoten (leaves) of a subtree. Es kann sein 2, 3, ...
   - $\alpha$ steuert die Balance zwischen Baumkomplexität und Anpassung an Trainingsdaten.
 
 - **Vorgehen**
+  
   - $\alpha = 0$: Baum $T = T_0$.
   - $\alpha$ steigt: Komplexität wird bestraft, kleinere Subbäume werden bevorzugt.
 
 - **Algorithmus 8.1: Regressionsbäume Bauen**
+  
   1. **Großen Baum wachsen lassen**
      - Rekursive binäre Teilung anwenden.
      - Stopp, wenn Knoten weniger als eine Mindestanzahl an Beobachtungen haben.
@@ -302,7 +322,11 @@ Boston.describe().round(1)
      - $\alpha$ wählen, das den durchschnittlichen Fehler minimiert.
   4. **Subbaum zurückgeben**
      - Subbaum für das gewählte $\alpha$ aus Schritt 2 zurückgeben.
-
+  - Erläuterung Schritt 2:
+    - Nachdem wir den größten Baum haben, berechnen wir das Fehlermaß MSE.
+    - Dann beginnen wir, einen Knoten zu schneiden.
+    - Anschließend berechnen wir das MSE des beschnittenen Baums und die Anzahl der entfernten Blätter.
+    - Das Alpha für diesen Schnitt ist die Differenz zwischen diesem Fehlermaß MSE und dem Fehlermaß MSE des größten Baums, geteilt durch die Anzahl der entfernten Blätter.
 
 ## 3.2. Anwendung
 
@@ -360,7 +384,6 @@ print(export_text(TRE_Reg, feature_names=feature_names))
     |   |   |   |--- value: [46.25]
     |   |   |--- ptratio >  18.30
     |   |   |   |--- value: [28.55]
-    
 
 - Variablen:
   - `rm`: Durchschnittliche Anzahl der Zimmer.
@@ -368,13 +391,11 @@ print(export_text(TRE_Reg, feature_names=feature_names))
 - Ergebnisse der Baum-Analyse:
   - Weniger Armut (`lstat` niedrig) führt zu höheren Hauspreisen.
   - Beispiel:
-    - Medianer Hauspreis: $12,042.
+    - Medianer Hauspreis: $12,04.
     - Kleine Häuser (`rm < 6.8`).
     - Hohe Armut (`lstat > 14.4`).
     - Moderate Kriminalitätsrate (`crim > 5.8`).
-- Nächste Schritte:
-  - Verwendung von Kreuzvalidierung.
-  - Prüfen, ob Baumschnitt die Leistung verbessert.
+- Nächste Schritte: Verwendung von Kreuzvalidierung, um das $\alpha$ für Pruning zu finden.
 
 ```python=
 # Find the optimal depth
@@ -386,9 +407,7 @@ grid = skm.GridSearchCV(TRE_Reg, {'ccp_alpha': ccp_path.ccp_alphas},
                         refit=True, cv=kfold,
                         scoring='neg_mean_squared_error').fit(X_train, y_train)
 best_ = grid.best_estimator_
-# Show training MSE
 print('Training MSE:', np.mean((best_.predict(X_train) - y_train) ** 2))
-# Show testing MSE
 print('Testing MSE:', np.mean((best_.predict(X_test) - y_test) ** 2))
 # Plot tree
 ax = plt.subplots(figsize=(12,12))[1]
@@ -398,15 +417,12 @@ plot_tree(best_, feature_names=feature_names, ax=ax);
     Training MSE: 12.619
     Testing MSE: 28.069
 
-    
 ![](Figures\boston_14_1.png)
-    
 
-- **Test Set MSE**:
+- Test Set MSE:
   - MSE für den Regression Tree: $28.07 = 5.30^2$.
   - Durchschnittliche Abweichung zwischen vorhergesagtem und tatsächlichem Hauswert: ca. $5300.
-- **Erneuter Lauf**:
-  - Baum ohne maximale Tiefe wachsen lassen.
+- Erneuter Lauf: Baum ohne maximale Tiefe wachsen lassen.
 
 ```python=
 # Rerun with no restriction on depth
@@ -421,9 +437,7 @@ grid = skm.GridSearchCV(TRE_RegNo, {'ccp_alpha': ccp_path.ccp_alphas},
                         refit=True, cv=kfold,
                         scoring='neg_mean_squared_error').fit(X_train, y_train)
 best_ = grid.best_estimator_
-# Show training MSE
 print('Training MSE:', np.mean((best_.predict(X_train) - y_train) ** 2))
-# Show testing MSE
 print('Testing MSE:', np.mean((best_.predict(X_test) - y_test) ** 2))
 # Plot tree
 ax = plt.subplots(figsize=(12,12))[1]
@@ -435,19 +449,22 @@ plot_tree(best_, feature_names=feature_names, ax=ax);
 
 ![](Figures\boston_16_1.png)
 
-# 4. Bagging and Random Forests
+# 4. Bagging und Random Forests
 
 - Definition:
+  
   - Kombinieren viele einfache Modelle (sogenannte schwache Lerner)
   - Ziel: Ein starkes und leistungsfähiges Modell
 
 - Beispiele für Ensemble-Methoden:
+  
   - Bagging
   - Random Forests
   - Boosting
   - Bayesian Additive Regression Trees
 
 - Gemeinsames Merkmal:
+  
   - Verwenden Regression- oder Klassifikationsbäume als Bausteine
 
 - Nutzung von `RandomForestRegressor()` aus dem Paket `sklearn.ensemble` zum Fitten von Bagging- und Random-Forest-Modellen
@@ -455,34 +472,39 @@ plot_tree(best_, feature_names=feature_names, ax=ax);
 ## 4.1. Bagging
 
 - **Bootstrap**
+  
   - Einführung:
+    
     - Bootstrap ist eine mächtige Methode.
     - Es hilft, Standardabweichungen zu berechnen, wenn dies direkt schwierig ist.
     - Kann verwendet werden, um statistische Lernmethoden wie Entscheidungsbäume zu verbessern.
-
+  
   - Entscheidungsbäume und Varianz:
+    
     - Entscheidungsbäume haben hohe Varianz.
     - Unterschiedliche Trainingsdaten führen zu unterschiedlichen Ergebnissen.
     - Verfahren mit geringer Varianz liefern ähnliche Ergebnisse bei verschiedenen Datensätzen.
     - Bootstrap Aggregation (Bagging) reduziert Varianz.
-
+  
   - Bagging:
+    
     - Viele Trainingssätze erstellen, Modell trainieren und Vorhersagen mitteln.
     - Praktisch nicht möglich, daher Bootstrapping:
       - B bootstrapped Trainingssätze erstellen.
       - Modelle auf jedem Satz trainieren und Vorhersagen mitteln.
     - Besonders nützlich für Entscheidungsbäume.
-
+  
   - Anwendung bei Regressionsbäumen:
+    
     - B Bäume mit tiefen, unbeschnittenen Bäumen erstellen.
     - Vorhersagen mitteln, um Varianz zu reduzieren.
-    - Verbessert Genauigkeit durch Kombination vieler Bäume.
-
+  
   - Anwendung bei Klassifikationsbäumen:
+    
     - Vorhersage jeder Klasse durch Mehrheitswahl der B Bäume.
 
 - **Out-of-Bag Fehlerabschätzung**
-
+  
   - Einfache Schätzung des Testfehlers ohne Kreuzvalidierung.
   - Jeder Baum nutzt durchschnittlich zwei Drittel der Daten.
   - Die verbleibenden Daten sind Out-of-Bag (OOB) Beobachtungen.
@@ -490,25 +512,26 @@ plot_tree(best_, feature_names=feature_names, ax=ax);
   - OOB Fehler entspricht Leave-One-Out Kreuzvalidierungsfehler.
 
 - **Variable Importance Measures**
-
-  - Bagging verbessert Vorhersagegenauigkeit, reduziert aber Interpretierbarkeit.
+  
+  - Bagging verbessert Vorhersagegenauigkeit durch Kombination vieler Bäume, reduziert aber Interpretierbarkeit.
   - Wichtigkeit eines Prädiktors durch RSS (Regressionsbäume) oder Gini-Index (Klassifikationsbäume) messen.
   - Grafische Darstellung der Variablenwichtigkeit zeigt wichtigste Variablen.
 
 - Bagging:
+  
   - Spezialfall von Random Forests
   - Mit `m = p` (alle Variablen werden bei jedem Split berücksichtigt)
 
 ```python=
-BAGG_boston = RF(max_features=X_train.shape[1], random_state=0).fit(X_train, y_train)
+BAGG_boston = RF(max_features=12, random_state=0).fit(X_train, y_train)
 ```
 
 - Einstellung `max_features`:
-  - Wert auf 12 gesetzt
+  
   - Alle 12 Prädiktoren werden bei jedem Split berücksichtigt
-  - Bedeutet, dass wir Bagging verwenden
 
 - Evaluierung:
+  
   - Test-MSE für das Bagging-Modell berechnen
   - Streudiagramme der vorhergesagten vs. tatsächlichen Werte plotten
 
@@ -522,21 +545,14 @@ ax.scatter(BAGG_boston.predict(X_test), y_test);
     Training MSE: 1.371
     Testing MSE: 14.635
 
-    
 ![](Figures\boston_21_1.png)
-    
 
-- Test-MSE für den Bagged Regressionsbaum:
-  - Wert: 14.63
-  - Ungefähr die Hälfte des Wertes eines optimal beschnittenen einzelnen Baums
-
-- Anpassen der Anzahl der Bäume:
+- Vermehren der Anzahl der Bäume:
   - Standardwert: 100
   - Nutzung des Arguments `n_estimators`
 
 ```python=
-BAGG_boston = RF(max_features=X_train.shape[1],
-                n_estimators=500,
+BAGG_boston = RF(max_features=12, n_estimators=500,
                 random_state=0).fit(X_train, y_train)
 print('Training MSE:', np.mean((BAGG_boston.predict(X_train) - y_train) ** 2))
 print('Testing MSE:', np.mean((BAGG_boston.predict(X_test) - y_test) ** 2))
@@ -552,48 +568,34 @@ print('Testing MSE:', np.mean((BAGG_boston.predict(X_test) - y_test) ** 2))
 ## 4.2. Random Forest
 
 - Verbesserung von Bagging:
+  
   - Dekorrelieren der Bäume durch zufällige Auswahl von m Prädiktoren bei jedem Split
   - Typischerweise $m \approx \sqrt{p}$
 
 - Verfahren:
+  
   - Entscheidungbäume auf bootstrapped Trainingsproben aufbauen
   - Bei jedem Split wird eine zufällige Auswahl von m Prädiktoren betrachtet
   - Der Split nutzt nur einen dieser m Prädiktoren
 
 - Vorteil:
+  
   - Verhindert, dass starke Prädiktoren alle Splits dominieren
   - Reduziert Korrelation zwischen Bäumen
   - Führt zu geringerer Varianz und zuverlässigeren Vorhersagen
 
-- Hauptunterschied zu Bagging:
-  - Größe des Prädiktor-Subsets m
-  - Bei m = p entspricht Random Forests dem Bagging
-
-- Beispiel:
-  - Bei Herz-Daten: $m = \sqrt{p}$ reduziert Test- und OOB-Fehler im Vergleich zu Bagging
-  - Bei biologischen Daten: Vorhersage von Krebsarten basierend auf 500 Genen
-    - Fehlerrate eines einzelnen Baums: 45,7%
-    - Nullrate: 75,4%
-    - Nutzung von 400 Bäumen ausreichend für gute Leistung
-    - $m = \sqrt{p}$ verbessert Testfehler geringfügig im Vergleich zu Bagging
-
 - Überanpassung:
+  
   - Random Forests überpassen nicht, wenn B erhöht wird
   - In der Praxis wird ein ausreichend großer Wert von B verwendet, damit sich die Fehlerquote stabilisiert hat
 
-- Wachstum eines Random Forests:
-  - Ähnlich wie Bagging, jedoch mit kleinerem `max_features` Wert.
-
 - Standardwerte:
+  
   - `RandomForestRegressor()` nutzt alle $p$ Variablen (entspricht Bagging).
   - `RandomForestClassifier()` nutzt $\sqrt{p}$ Variablen.
 
-- Anpassung:
-  - Setzen von `max_features=6`.
-
 ```python=
-RF_boston = RF(max_features=6,
-               random_state=0).fit(X_train, y_train)
+RF_boston = RF(max_features=6, random_state=0).fit(X_train, y_train)
 print('Training MSE:', np.mean((RF_boston.predict(X_train) - y_train) ** 2))
 print('Testing MSE:', np.mean((RF_boston.predict(X_test) - y_test) ** 2))
 ```
@@ -602,16 +604,17 @@ print('Testing MSE:', np.mean((RF_boston.predict(X_test) - y_test) ** 2))
     Testing MSE: 20.043
 
 - Test-MSE für den Random Forest:
+  
   - Wert: 20.04
   - Schlechtere Leistung als Bagging in diesem Fall
 
 - Bestimmen der Variablenwichtigkeit:
+  
   - Nutzung des Attributs `feature_importances_`
 
 ```python=
-feature_imp = pd.DataFrame(
-    {'importance':RF_boston.feature_importances_},
-    index=feature_names)
+feature_imp = pd.DataFrame( index=feature_names,
+    {'importance':RF_boston.feature_importances_} )
 feature_imp.sort_values(by='importance', ascending=False)
 ```
 
@@ -675,41 +678,54 @@ feature_imp.sort_values(by='importance', ascending=False)
 </table>
 
 - Ergebnisse:
+  
   - Wichtigste Variablen im Random Forest: Gemeinschaftswohlstand (`lstat`) und Hausgröße (`rm`)
 
 - Grundlage der Messung:
+  
   - Durchschnittliche Verringerung der Knotenverunreinigung bei Splits auf eine bestimmte Variable über alle Bäume im Wald
 
 # 5. Boosting
 
-- Verbesserung von Vorhersagen durch Entscheidungsbäume:
-  - Allgemeiner Ansatz für Regression und Klassifikation
-  - Hier auf Entscheidungsbäume beschränkt
+- Allgemeiner Ansatz für Regression und Klassifikation. Hier auf Entscheidungsbäume beschränkt.
 
 - Unterschied zu Bagging:
+  
   - Bäume werden sequentiell anstatt unabhängig aufgebaut
   - Keine Bootstrap-Stichproben, sondern modifizierte Datensätze
 
 - Algorithmus für Regression:
+  
   1. Setze ${\hat{f}}{(x)} = 0$ und $r_i = y_i$ für alle i im Trainingssatz.
   2. Für b = 1, 2, ..., B:
      - Passe einen Baum ${\hat{f^b}}$ mit d Splits an die Daten (X, r) an.
      - Aktualisiere ${\hat{f}}$ um eine geschrumpfte Version des neuen Baums: ${\hat{f}}(x) \leftarrow {\hat{f}}(x) + λ {\hat{f^{b}}}{(x)}$.
      - Aktualisiere die Residuen: $r_i \leftarrow r_i - λ {\hat{f^{b}}}{(x_i)}$.
   3. Ausgabe des Modells: ${\hat{f}}{(x)} = \sum_{b=1}^B {λ {\hat{f^{b}}}{(x)}}$.
+  - Schritt 2:
+    
+    - Baum ${\hat{f^b}}$ mit d Teilungen anpassen: Ein Regressionsbaum wird auf die Daten X mit den Residuen r als Antwortvariable angepasst. Die Tiefe des Baums ist begrenzt (d), um Überanpassung zu vermeiden.
+    
+    - ${\hat{f}}$ aktualisieren: Die Gesamtvorhersage wird durch eine skalierte Version des neuen Baums aktualisiert. Der Skalierungsfaktor **λ (Schrumpfungsparameter)** steuert den Beitrag jedes Baums.
+    
+    - Residuen aktualisieren: Residuen werden aktualisiert, indem die Vorhersagen des neuen Baums (skaliert durch λ) subtrahiert werden, sodass nachfolgende Bäume sich auf vorherige Fehler konzentrieren.
 
 - Idee:
+  
   - Langsames Lernen durch Anpassen von Bäumen an die Residuen
   - Kleine Bäume verbessern das Modell schrittweise
   - Shrinkage-Parameter λ verlangsamt den Prozess weiter
 
 - Unterschiede zu Bagging:
+  
   - Konstruktion jedes Baums hängt stark von vorherigen Bäumen ab
 
 - Boosting für Klassifikationsbäume:
+  
   - Ähnlich, aber komplexer als bei Regressionsbäumen
 
 - Abstimmungsparameter:
+  
   1. Anzahl der Bäume B:
      - Kann bei zu großer Anzahl überanpassen
      - Kreuzvalidierung zur Auswahl von B
@@ -720,32 +736,22 @@ feature_imp.sort_values(by='importance', ascending=False)
      - Kontrolliert die Komplexität
      - Oft funktioniert d = 1 gut
 
-- Beispiel:
-  - Boosting auf 15-Klassen Krebs-Gendaten angewendet
-  - Testfehler als Funktion der Baumanzahl und Interaktionstiefe d
-  - Einfache Stümpfe (d = 1) performen gut
-  - Übertreffen Modell mit Tiefe zwei und Random Forest
-
 - Vorteil kleiner Bäume:
+  
   - Bessere Interpretierbarkeit
   - Additives Modell bei Verwendung von Stümpfen
 
-- Verwendung von `GradientBoostingRegressor()`:
-  - Fitten von Boosted Regressionsbäumen
-
-- Verwendung von `GradientBoostingClassifier()`:
-  - Durchführung von Klassifikationen
+- Verwendung von `GradientBoostingRegressor()` und `GradientBoostingClassifier()`.
 
 - Argumente:
+  
   - `n_estimators=5000`: Erstellen von 5.000 Bäumen
   - `max_depth=3`: Begrenzung der Tiefe jedes Baums
   - `learning_rate`: Entspricht dem zuvor beschriebenen $\lambda$ beim Boosting
 
 ```python=
-boost_boston = GBR(n_estimators=5000,
-                   learning_rate=0.001,
-                   max_depth=3,
-                   random_state=0)
+boost_boston = GBR(n_estimators=5000, max_depth=3,
+                   learning_rate=0.001, random_state=0)
 boost_boston.fit(X_train, y_train)
 print('Training MSE:', np.mean((boost_boston.predict(X_train) - y_train) ** 2))
 print('Testing MSE:', np.mean((boost_boston.predict(X_test) - y_test) ** 2))
@@ -778,24 +784,16 @@ test_error
     array([83.633, 83.499, 83.366, ..., 14.482, 14.482, 14.481])
 
 ```python=
-# Set plot_idx from 1 to 
 plot_idx = np.arange(boost_boston.train_score_.shape[0])
-# Set the plot up
 ax = plt.subplots(figsize=(8,8))[1]
 # Plot the training error in blue
-ax.plot(plot_idx,
-        boost_boston.train_score_,
-        'b', label='Training')
+ax.plot(plot_idx, boost_boston.train_score_, 'b', label='Training')
 # Plot the testing error in red
-ax.plot(plot_idx,
-        test_error,
-        'r', label='Test')
+ax.plot(plot_idx, test_error, 'r--', label='Test')
 ax.legend();
 ```
 
-    
 ![](Figures\boston_37_0.png)
-    
 
 - Durchführung von Boosting mit unterschiedlichem Shrinkage-Parameter $\lambda$:
   - Standardwert: 0.001
@@ -803,85 +801,85 @@ ax.legend();
   - Ähnliches Ergebnis
 
 ```python=
-boost_boston = GBR(n_estimators=5000,
-                   learning_rate=0.2,
-                   max_depth=3,
-                   random_state=0)
-boost_boston.fit(X_train,
-                 y_train)
+boost_boston = GBR(n_estimators=5000, max_depth=3,
+                   learning_rate=0.2, random_state=0)
+boost_boston.fit(X_train, y_train)
 y_hat_boost = boost_boston.predict(X_test);
 np.mean((y_test - y_hat_boost)**2)
 ```
 
     14.502
 
-
 # 6. Bayesian Additive Regression Trees
 
 - Einführung in BART:
+  
   - Ensemble-Methode mit Entscheidungsbäumen
   - Präsentiert für Regression
 
 - Vergleich mit anderen Methoden:
+  
   - Bagging und Random Forests: Vorhersagen aus Durchschnitt von Bäumen, unabhängig gebaut
   - Boosting: Gewichtete Summe von Bäumen, jeder Baum passt auf Residuen des aktuellen Fits
   - BART: Kombination aus beiden, zufälliges Bauen wie Bagging und Random Forests, Signalaufnahme wie Boosting
 
 - Algorithm Notation:
-  - K: Number of trees
-  - B: Number of iterations
+  
+  - K: Anzahl der Bäume.
+  - B: Anzahl der Iterationen.
   - ${\hat{f}}^b_k(x)$: Prediction of the k-th tree in the b-th iteration
 
-- **BART Algorithm**:
-  1. **Initialization**:
+- BART Algorithm:
+  
+  1. Initialization:
      - All trees start with a single root node.
      - ${\hat{f}}^1_k(x) = \frac{1}{nK} \sum_{i=1}^{n} y_i$
-  2. **Iterations**:
+  2. Iterations:
      - Update each of the K trees sequentially.
      - Compute partial residuals $r_i = y_i - \sum_{k^\prime<k}{{\hat{f}}_{k'}^b(x_i)} - \sum_{k^\prime>k}{{\hat{f}}_{k'}^{b-1}(x_i)}$
-     - Perturb the previous tree ${\hat{f}}_{k}^{b-1}$ for a better fit.
-  3. **Perturbations**:
-     - Change tree structure by adding or pruning branches.
-     - Change predictions in terminal nodes.
+       - $\sum_{k^\prime<k}{{\hat{f}}_{k'}^b(x_i)}$:  The sum of predictions from trees in the *current iteration (b)* that have already been updated (*k′* is less than *k*).
+       - $\sum_{k^\prime>k}{{\hat{f}}_{k'}^{b-1}(x_i)}$: The sum of predictions from trees in the *previous iteration (b-1)* that have not yet been updated in the current iteration (*k′* is greater than *k*).
+     - Perturb the previous tree ${\hat{f}}_{k}^{b-1}$ based on $r_i$ for a better fit.
+  3. Perturbations:
+     - Growing the Tree: Adds a new internal node by splitting a terminal node to capture more intricate data relationships.
+       - Chooses the split that best improves the fit to partial residuals.
+     - Pruning the Tree: Removes a terminal node, merging it with its parent to simplify the tree and reduce overfitting.
+       - Evaluates pruning impact and opts for minimal error increase.
+     - Changing Predictions: Alters the predicted value of a terminal node to fine-tune the tree's output.
+       - Adjustments driven by the average value of partial residuals in that node.
+     - Key Considerations:
+       - Stochasticity: Perturbations are chosen stochastically, with a preference for error reduction.
+       - Balance: Balances exploration and exploitation to avoid local optima.
+       - Regularization: Incorporates random perturbations to prevent overfitting and promote generalizability.
+       - Bayesian Framework: Perturbations are viewed as drawing from a posterior distribution of trees.
 
 - Output:
+  
   - Collection of prediction models ${\hat{f}}^b(x) = \sum_{k=1}^{K}{{\hat{f}}_k^b(x)}$
   - Average predictions after burn-in period: $\hat{f}(x) = \frac{1}{B-L} \sum_{b=L+1}^{B}{{\hat{f}}^b(x)}$
 
 - Key Points:
+  
   - Avoid overfitting by slight modifications of trees.
   - Trees are small to prevent overfitting.
   - Burn-in period helps stabilize error rates.
 
-- Example:
-  - Applied to Heart data with K = 200 trees and B = 10,000 iterations.
-  - Test and training errors stabilize after burn-in.
-  - BART shows small difference between training and test errors, indicating minimal overfitting.
-
 - Boosting Comparison:
+  
   - Boosting test error increases with more iterations, indicating overfitting.
   - BART maintains stable error rates.
 
 - Bayesian Perspective:
+  
   - BART can be viewed as drawing trees from a posterior distribution.
   - Algorithm 8.3 resembles a Markov chain Monte Carlo algorithm.
 
 - Parameter Selection:
+  
   - Choose large B and K, and moderate L (burn-in iterations).
   - Example: K = 200, B = 1,000, L = 100
     - The final model bases on 900 iterations.
   - BART performs well with minimal tuning.
-
-- Verwendung von `BART()` aus dem Paket `ISLP.bart`:
-  - Fitten eines Bayesian Additive Regression Tree Modells
-
-- Zweck:
-  - `BART()` für quantitative Ergebnisvariablen
-  - Andere Implementierungen existieren für logistische und Probit-Modelle bei kategorialen Ergebnissen
-
-- Argumente:
-  - `burnin`: Anzahl der Iterationen, die als Burn-in verworfen werden
-  - `ndraw`: Anzahl der Iterationen, die nach dem Burn-in beibehalten werden
 
 ```python=
 # Set and fit a BART model
@@ -897,9 +895,11 @@ print('Testing MSE:', np.mean((bart_boston.predict(X_test.astype(np.float32)) - 
     Testing MSE: 22.145
 
 - **Test MSE**:
+  
   - The test MSE for BART is comparable to that of the random forest.
 
 - **Variable Importance**:
+  
   - Check the frequency of each variable's appearance across all trees.
   - This is similar to the variable importance measure in random forests.
   - Provides a summary similar to the variable importance plot for boosting and random forests.
@@ -909,47 +909,46 @@ variable_inclusion = pd.Series(bart_boston.variable_inclusion_.mean(0), index=De
 variable_inclusion.sort_values(ascending=False)
 ```
 
-    lstat      31.000000
-    rm         29.800000
-    zn         27.866667
-    crim       26.933333
-    nox        26.600000
-    indus      26.466667
-    dis        26.466667
-    ptratio    24.266667
-    tax        24.133333
-    rad        23.666667
-    age        22.733333
-    chas       22.466667
+    lstat      31.000
+    rm         29.800
+    zn         27.866
+    crim       26.933
+    nox        26.600
+    indus      26.466
+    dis        26.466
+    ptratio    24.266
+    tax        24.133
+    rad        23.666
+    age        22.733
+    chas       22.466
     dtype: float64
 
 # 7. Zusammenfassung
 
 - **Vorteile von Bäumen als schwache Lernende**:
+  
   - Flexibilität
   - Umgang mit qualitativen und quantitativen Prädiktoren
 
-- **Methoden zur Anpassung eines Ensemble von Bäumen**:
-  - Bagging
-  - Random Forests
-  - Boosting
-  - BART
-
 - **Bagging**:
+  
   - Bäume wachsen unabhängig auf zufälligen Stichproben der Beobachtungen.
   - Bäume sind ähnlich und können in lokalen Optima stecken bleiben.
 
 - **Random Forests**:
+  
   - Bäume wachsen unabhängig auf zufälligen Stichproben der Beobachtungen.
   - Jede Teilung erfolgt mit einer zufälligen Teilmenge der Merkmale.
   - Dekorreliert die Bäume und erkundet den Modellraum gründlicher als Bagging.
 
 - **Boosting**:
+  
   - Verwendet nur die Originaldaten, keine zufälligen Stichproben.
   - Bäume wachsen nacheinander mit „langsamem“ Lernansatz.
   - Jeder neue Baum passt sich dem verbleibenden Signal der vorherigen Bäume an und wird geschrumpft.
 
 - **BART**:
+  
   - Verwendet nur die Originaldaten.
   - Bäume wachsen nacheinander.
   - Jeder Baum wird zufällig verändert, um lokale Minima zu vermeiden und den Modellraum gründlicher zu erkunden.
