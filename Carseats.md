@@ -186,10 +186,6 @@ Carseats.describe().round(1)
 
 # 3. Klassifikationsbäume
 
-- Klassifikationsbaum:
-  - Prognostiziert qualitative Antworten.
-  - Ähnlich wie Regressionsbaum, aber für Klassen.
-
 - Klassifikationsbaum vs. Regressionsbaum:
   - Regressionsbaum: Vorhersage durch Mittelwert der Trainingsbeobachtungen.
   - Klassifikationsbaum: Vorhersage durch häufigste Klasse der Trainingsbeobachtungen.
@@ -198,23 +194,19 @@ Carseats.describe().round(1)
   - Nutzen rekursives binäres Teilen.
   - Klassifikationsfehlerrate als Kriterium:
     - Fehlerquote: $E = 1 - \max_k {\hat{p}}_{mk}$.
-    - ${\hat{p}}_{mk}$: Anteil der Trainingsbeobachtungen in Klasse k.
+      - $k$ ist eine Klasse, $m$ ist ein Bereich im Klassifikationsbaum.
+      - ${\hat{p}}_{mk}$ ist der Anteil der Trainingsbeobachtungen im Bereich $m$ aus der Klasse $k$.
+      - Beispiele:
+        - $k = 1$ könnte "Herzkrankheit" sein, $k = 2$ "Keine Herzkrankheit".
+        - $m = 3$ bezieht sich auf den dritten Endknoten.
+        - ${\hat{p}}_{3,1}$ ist der Anteil der Beobachtungen im dritten Bereich, die als "Herzkrankheit" klassifiziert sind.
+
 
 - Bessere Kriterien als Klassifikationsfehlerrate:
   - Gini-Index: $G = \sum_{k=1}^{K} {\hat{p}}_{mk} (1 - {\hat{p}}_{mk})$
     - Klein, wenn Knoten rein ist.
   - Entropie: $D = -\sum_{k=1}^{K} {\hat{p}}_{mk} \log {\hat{p}}_{mk}$
     - Klein bei reinen Knoten.
-  
-- Beispiel (Abbildung 8.6):
-  - Heart-Datensatz mit 303 Patienten.
-  - Binary Outcome: Herzkrankheit (Yes/No).
-  - 13 Prädiktoren: Alter, Geschlecht, Cholesterin, etc.
-  - Kreuzvalidierung ergibt Baum mit 6 Endknoten.
-
-- Qualitative Prädiktoren:
-  - Entscheidungsbäume auch mit qualitativen Prädiktoren möglich.
-  - Beispiel: "Thal" und "ChestPain" im Heart-Datensatz.
 
 - Node Purity:
   - Split erhöht Knotenreinheit.
@@ -224,7 +216,6 @@ Carseats.describe().round(1)
 ## 3.1. Baum erstellen
 
 - Erstellen der binären Variable `High`
-  - `High` zeigt an, ob der Umsatz größer als 8 ist.
 
 ```python=
 #High = Carseats.Sales > 8
@@ -247,25 +238,13 @@ X = np.asarray(Design_Matrix)
   - `random_state`: Seed für den Zufallsgenerator beim Mischen der Daten (Standard: `None`)
 
 ```python=
-# Fit a decision tree
 TRE_clas = DTC(criterion='entropy', max_depth=3, random_state=0)        
 TRE_clas.fit(X, High);
-```
-
-- Das Buch beschreibt, wie qualitative Merkmale in Entscheidungsbäumen natürlich behandelt werden:
-  - Aufteilung der Levels in zwei Gruppen.
-- sklearn's Implementierung:
-  - Behandelt One-Hot-Encoded Levels als separate Variablen.
-- Modellgenauigkeit überprüfen.
-
-```python=
 accuracy_score(High, TRE_clas.predict(X))
+# 0.79
 ```
 
-    0.79
-
-- Standardargumente:
-  - Trainingsfehlerquote: 21%
+- Trainingsfehlerquote: 21%
 - Klassifikationsbäume:
   - Nutzung von `log_loss()` zur Bestimmung des Deviance-Werts
   - Formel: $-2 \sum_m \sum_k n_{mk} \log \hat{p}_{mk}$
@@ -275,11 +254,9 @@ accuracy_score(High, TRE_clas.predict(X))
   - Kleine Deviance deutet auf gute Anpassung an Trainingsdaten hin
 
 ```python=
-resid_dev = np.sum(log_loss(High, TRE_clas.predict_proba(X))); resid_dev
+np.sum( log_loss(High, TRE_clas.predict_proba(X)) )
+# 0.471
 ```
-
-    0.4710647062649358
-
 
 ```python=
 fig, ax = plt.subplots(figsize=(12,12))
@@ -289,10 +266,7 @@ plot_tree(TRE_clas, feature_names=feature_names, ax=ax);
 ![](Figures/carseats_17_0.png)
 
 - Wichtiger Indikator für `Sales`: `ShelveLoc`
-- Baum im Textformat drucken:
-  - Verwenden von `export_text()`
-- Beobachtungsanzahl in jedem Knoten anzeigen:
-  - Verwenden von `show_weights=True`
+- `show_weights=True` zeigt Beobachtungsanzahl in jedem Knote an.
 
 ```python=
 print(export_text(TRE_clas, feature_names=feature_names, show_weights=True))
@@ -332,12 +306,8 @@ print(export_text(TRE_clas, feature_names=feature_names, show_weights=True))
 validation = skm.ShuffleSplit(n_splits=1, test_size=200, random_state=0)
 results = skm.cross_validate(TRE_clas, X, High, cv=validation)
 results['test_score']
+# array([0.685])
 ```
-
-    array([0.685])
-
-- Ergebnis der Prozedur:
-  - Korrekte Vorhersage für 68,5% der Beobachtungen im Validierungsset.
 
 ## 3.2. Baum beschneiden
 
@@ -356,41 +326,35 @@ X_train, X_test, High_train, High_test = skm.train_test_split(
 ```python=
 TRE_clas = DTC(criterion='entropy', random_state=0).fit(X_train, High_train)
 accuracy_score(High_test, TRE_clas.predict(X_test))
+# 0.735
 ```
 
-    0.735
-
 - Baum ohne maximale Tiefe neu anpassen:
-  - Ergebnis: 73,5% korrekte Vorhersagen im Testset
-- Nächster Schritt:
-  - Nutzung von `cost_complexity_pruning_path()` aus `TRE_clas` zur Ermittlung der Kostenkomplexitätswerte
+  - Ergebnis: 73,5% korrekte Vorhersagen im Testset.
+
+-  
 
 ```python=
 ccp_path = TRE_clas.cost_complexity_pruning_path(X_train, High_train)
 ccp_path
 ```
 
-    {'ccp_alphas': array([0.        , 0.01622556, 0.0171946 , 0.0180482 , 0.0180482 ,
-            0.01991688, 0.02012073, 0.02070855, 0.02193427, 0.0219518 ,
-            0.02220877, 0.02274806, 0.02417233, 0.02588672, 0.02714959,
-            0.02735525, 0.02900052, 0.02906078, 0.03209543, 0.04499252,
-            0.06236632, 0.10024835]),
-     'impurities': array([0.        , 0.01622556, 0.05061477, 0.06866297, 0.08671117,
-            0.12654492, 0.14666566, 0.16737421, 0.18930848, 0.21126028,
-            0.25567782, 0.27842588, 0.32677055, 0.35265727, 0.43410604,
-            0.54352706, 0.57252758, 0.65970991, 0.72390076, 0.8138858 ,
-            0.87625212, 0.97650047])}
+    ccp_alphas: array([0.0, 0.016, 0.017, 0.018, 0.018, 0.019,
+    0.020, 0.020, 0.021, 0.021, 0.022, 0.022, 0.024, 0.025,
+    0.027, 0.027, 0.029, 0.029, 0.032, 0.044, 0.062, 0.100])
 
-- Ergebnis:
-  - Verunreinigungen und $\alpha$-Werte optimierbar durch Kreuzvalidierung
+    impurities: array([0.0, 0.016, 0.050, 0.068, 0.086, 0.126,
+    0.146, 0.167, 0.189, 0.211, 0.255, 0.278, 0.326, 0.352,
+    0.434, 0.543, 0.572, 0.659, 0.723, 0.813, 0.876, 0.976])
+
+- Kostenkomplexitätswerte:
+  - Kombination aus Baumverunreinigung und Knotenzahl.
 - CCP alphas:
   - Effektive Komplexitätsparameter zum Beschneiden eines Entscheidungsbaums
   - Aufgelistet von klein bis groß
   - Jede $\alpha$ entspricht einer anderen beschnittenen Version des Baums
-- Verunreinigungen:
-  - Gesamtverunreinigungen der Blätter nach dem Beschneiden mit ccp_alpha
-- Kostenkomplexität:
-  - Kombination aus Baumverunreinigung und Knotenzahl
+- Verunreinigungen und $\alpha$-Werte optimierbar durch Kreuzvalidierung
+  
 
 ```python=
 # Set 10-fold cross-validation up
@@ -402,11 +366,10 @@ grid = skm.GridSearchCV(TRE_clas, {'ccp_alpha': ccp_path.ccp_alphas},
 grid.fit(X_train, High_train)
 # Show the trainning error rate
 grid.best_score_
+# 0.685
 ```
 
-    0.685
-
-- We plot the pruned true.
+- Beschnittenen Baum plotten
 
 ```python=
 ax = plt.subplots(figsize=(12, 12))[1]
@@ -416,14 +379,12 @@ plot_tree(grid.best_estimator_, feature_names=feature_names, ax=ax);
     
 ![](Figures/carseats_32_0.png)
     
-
-- We can count the leaves.
+- Endknoten zählen
 
 ```python=
 grid.best_estimator_.tree_.n_leaves
+# 30
 ```
-
-    30
 
 - Baum mit 30 Endknoten:
   - Niedrigste Kreuzvalidierungs-Fehlerrate bei 68,5% Genauigkeit
@@ -432,9 +393,8 @@ grid.best_estimator_.tree_.n_leaves
 
 ```python=
 accuracy_score(High_test, grid.best_estimator_.predict(X_test))
+# 0.72
 ```
-
-    0.72
 
 ```python=
 # Show confusion table
@@ -444,14 +404,9 @@ confusion_table(grid.best_estimator_.predict(X_test), High_test)
 <table>
   <thead>
     <tr style="text-align: right;">
-      <th>Truth</th>
+      <th>Predicted\Truth</th>
       <th>No</th>
       <th>Yes</th>
-    </tr>
-    <tr>
-      <th>Predicted</th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -498,14 +453,11 @@ X_train,X_test,High_train,High_test = skm.train_test_split(X,High,test_size=0.5,
 TRE_clas = DTC(criterion='entropy', random_state=0)
 TRE_clas.fit(X_train, High_train)
 accuracy_score(High_test, TRE_clas.predict(X_test))
+# 0.735
 ```
-
-    0.735
 
 - Baum ohne maximale Tiefe neu anpassen:
   - Ergebnis: Ähnlich wie zuvor
-- Kostenkomplexitätswerte ermitteln:
-  - Nutzung von `cost_complexity_pruning_path()` aus `TRE_clas`
 
 ```python=
 ccp_path = TRE_clas.cost_complexity_pruning_path(X_train, High_train)
@@ -523,9 +475,8 @@ grid = skm.GridSearchCV(TRE_clas, {'ccp_alpha': ccp_path.ccp_alphas},
 grid.fit(X_train, High_train)
 # Show the trainning error rate
 grid.best_score_
+# 0.685
 ```
-
-    0.6849999999999999
 
 - Beschnittenen Baum plotten.
 
@@ -541,16 +492,14 @@ plot_tree(grid.best_estimator_, feature_names=feature_names, ax=ax);
 ```python=
 # Count the number of leaves
 grid.best_estimator_.tree_.n_leaves
+# 10
 ```
-
-    10
 
 ```python=
 # Access the test error rate
 accuracy_score(High_test, grid.best_estimator_.predict(X_test))
+# 0.68
 ```
-
-    0.68
 
 ```python=
 # Show confusion table
@@ -560,14 +509,9 @@ confusion_table(grid.best_estimator_.predict(X_test), High_test)
 <table>
   <thead>
     <tr style="text-align: right;">
-      <th>Truth</th>
+      <th>Predicted\Truth</th>
       <th>High_Sales</th>
       <th>Low_Sales</th>
-    </tr>
-    <tr>
-      <th>Predicted</th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -588,8 +532,8 @@ confusion_table(grid.best_estimator_.predict(X_test), High_test)
 
 - Regression und Klassifikation:
   - Bäume und lineare Modelle unterscheiden sich stark.
-  - Lineare Regression: $f(X) = \beta_0 + \sum_{j=1}^{p}{X_j\beta_j}$ (Gleichung 8.8)
-  - Regressionsbäume: $f(X) = \sum_{m=1}^{M}{c_m\ 1_{(X\in R_m)}}$ (Gleichung 8.9)
+  - Lineare Regression: $f(X) = \beta_0 + \sum_{j=1}^{p}{X_j\beta_j}$
+  - Regressionsbäume: $f(X) = \sum_{m=1}^{M}{c_m\ 1_{(X\in R_m)}}$
 
 - Modellwahl:
   - Lineares Modell funktioniert gut bei linearen Zusammenhängen.
