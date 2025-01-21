@@ -4,20 +4,21 @@ author: "db"
 ---
 
 # 1. Datenbeschreibung
+
 - Simulierte Daten zu Autokindersitz-Verkäufen in 400 Geschäften:
-    - 400 Zeilen
-    - 11 Variablen:
-        - Sales: Verkaufszahlen (in Tausend)
-        - CompPrice: Preis des Konkurrenten
-        - Income: Einkommensniveau der Gemeinschaft (in Tausend Dollar)
-        - Advertising: Werbebudget vor Ort (in Tausend Dollar)
-        - Population: Bevölkerungsgröße in der Region (in Tausend)
-        - Price: Firmenpreis für Kindersitze
-        - ShelveLoc: Qualität des Regals (Bad, Good, Medium)
-        - Age: Durchschnittsalter der Bevölkerung
-        - Education: Bildungsstand
-        - Urban: Stadt- oder Landlage (No, Yes)
-        - US: In den USA oder nicht (No, Yes)
+  - 400 Zeilen
+  - 11 Variablen:
+    - Sales: Verkaufszahlen (in Tausend)
+    - CompPrice: Preis des Konkurrenten
+    - Income: Einkommensniveau der Gemeinschaft (in Tausend Dollar)
+    - Advertising: Werbebudget vor Ort (in Tausend Dollar)
+    - Population: Bevölkerungsgröße in der Region (in Tausend)
+    - Price: Firmenpreis für Kindersitze
+    - ShelveLoc: Qualität des Regals (Bad, Good, Medium)
+    - Age: Durchschnittsalter der Bevölkerung
+    - Education: Bildungsstand
+    - Urban: Stadt- oder Landlage (No, Yes)
+    - US: In den USA oder nicht (No, Yes)
 
 # 2. Packages und Daten
 
@@ -187,10 +188,12 @@ Carseats.describe().round(1)
 # 3. Klassifikationsbäume
 
 - Klassifikationsbaum vs. Regressionsbaum:
+  
   - Regressionsbaum: Vorhersage durch Mittelwert der Trainingsbeobachtungen.
   - Klassifikationsbaum: Vorhersage durch häufigste Klasse der Trainingsbeobachtungen.
 
 - Klassifikationsbaum erstellen:
+  
   - Nutzen rekursives binäres Teilen.
   - Klassifikationsfehlerrate als Kriterium:
     - Fehlerquote: $E = 1 - \max_k {\hat{p}}_{mk}$.
@@ -201,14 +204,15 @@ Carseats.describe().round(1)
         - $m = 3$ bezieht sich auf den dritten Endknoten.
         - ${\hat{p}}_{3,1}$ ist der Anteil der Beobachtungen im dritten Bereich, die als "Herzkrankheit" klassifiziert sind.
 
-
 - Bessere Kriterien als Klassifikationsfehlerrate:
+  
   - Gini-Index: $G = \sum_{k=1}^{K} {\hat{p}}_{mk} (1 - {\hat{p}}_{mk})$
     - Klein, wenn Knoten rein ist.
   - Entropie: $D = -\sum_{k=1}^{K} {\hat{p}}_{mk} \log {\hat{p}}_{mk}$
     - Klein bei reinen Knoten.
 
 - Node Purity:
+  
   - Split erhöht Knotenreinheit.
   - Wichtig für genaue Vorhersagen.
   - Beispiel: Split "RestECG<1" am Baumende erhöht Reinheit, obwohl Vorhersage gleich bleibt.
@@ -294,7 +298,6 @@ print(export_text(TRE_clas, feature_names=feature_names, show_weights=True))
     |   |   |   |--- weights: [6.00, 0.00] class: No
     |   |   |--- Income >  46.00
     |   |   |   |--- weights: [5.00, 6.00] class: Yes
-    
 
 - Datenaufteilung:
   - In Trainings- und Validierungssets (je 200 Elemente)
@@ -330,9 +333,10 @@ accuracy_score(High_test, TRE_clas.predict(X_test))
 ```
 
 - Baum ohne maximale Tiefe neu anpassen:
+  
   - Ergebnis: 73,5% korrekte Vorhersagen im Testset.
 
--  
+- 
 
 ```python=
 ccp_path = TRE_clas.cost_complexity_pruning_path(X_train, High_train)
@@ -342,7 +346,7 @@ ccp_path
     ccp_alphas: array([0.0, 0.016, 0.017, 0.018, 0.018, 0.019,
     0.020, 0.020, 0.021, 0.021, 0.022, 0.022, 0.024, 0.025,
     0.027, 0.027, 0.029, 0.029, 0.032, 0.044, 0.062, 0.100])
-
+    
     impurities: array([0.0, 0.016, 0.050, 0.068, 0.086, 0.126,
     0.146, 0.167, 0.189, 0.211, 0.255, 0.278, 0.326, 0.352,
     0.434, 0.543, 0.572, 0.659, 0.723, 0.813, 0.876, 0.976])
@@ -354,7 +358,6 @@ ccp_path
   - Aufgelistet von klein bis groß
   - Jede $\alpha$ entspricht einer anderen beschnittenen Version des Baums
 - Verunreinigungen und $\alpha$-Werte optimierbar durch Kreuzvalidierung
-  
 
 ```python=
 # Set 10-fold cross-validation up
@@ -376,9 +379,8 @@ ax = plt.subplots(figsize=(12, 12))[1]
 plot_tree(grid.best_estimator_, feature_names=feature_names, ax=ax);
 ```
 
-    
 ![](Figures/carseats_32_0.png)
-    
+
 - Endknoten zählen
 
 ```python=
@@ -447,8 +449,6 @@ High = np.where(Carseats.Sales > 8, "High_Sales", "Low_Sales")
 X_train,X_test,High_train,High_test = skm.train_test_split(X,High,test_size=0.5,random_state=0)
 ```
 
-
-
 ```python=
 TRE_clas = DTC(criterion='entropy', random_state=0)
 TRE_clas.fit(X_train, High_train)
@@ -485,9 +485,7 @@ ax = plt.subplots(figsize=(12, 12))[1]
 plot_tree(grid.best_estimator_, feature_names=feature_names, ax=ax);
 ```
 
-    
 ![](Figures/carseats_48_0.png)
-    
 
 ```python=
 # Count the number of leaves
@@ -531,29 +529,35 @@ confusion_table(grid.best_estimator_.predict(X_test), High_test)
 # 5. Bäume vs. Lineare Modelle
 
 - Regression und Klassifikation:
+  
   - Bäume und lineare Modelle unterscheiden sich stark.
   - Lineare Regression: $f(X) = \beta_0 + \sum_{j=1}^{p}{X_j\beta_j}$
   - Regressionsbäume: $f(X) = \sum_{m=1}^{M}{c_m\ 1_{(X\in R_m)}}$
 
 - Modellwahl:
+  
   - Lineares Modell funktioniert gut bei linearen Zusammenhängen.
   - Entscheidungsbäume sind besser bei komplexen, nicht-linearen Beziehungen.
   - Leistung durch Kreuzvalidierung oder Validierungsset schätzen.
 
 - Weitere Überlegungen:
+  
   - Bäume bieten bessere Interpretierbarkeit und Visualisierung.
 
 ## Vor- und Nachteile von Entscheidungsbäumen
 
 - Vorteile:
+  
   - Einfach zu erklären.
   - Näher an menschlicher Entscheidungsfindung.
   - Grafisch darstellbar und leicht verständlich.
   - Handhaben qualitative Prädiktoren ohne Dummy-Variablen.
 
 - Nachteile:
+  
   - Geringere Vorhersagegenauigkeit.
   - Nicht robust; kleine Datenänderungen führen zu großen Baumänderungen.
 
 - Verbesserung der Leistung:
+  
   - Aggregation vieler Bäume (Bagging, Random Forests, Boosting).
