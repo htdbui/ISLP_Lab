@@ -424,7 +424,7 @@ hit_results.plot(x='epoch', y='valid_mae', label='Validation',
 ax.set_xlabel('Epoch'); ax.set_ylabel('Loss');
 ```
 
-![](Figures\hittersDL.png)
+<img title="" src="Figures\hittersDL.png" alt="" width="384">
 
 ```python=
 #fig, ax = plt.subplots(1, 1, figsize=(6, 6))

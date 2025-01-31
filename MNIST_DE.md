@@ -5,6 +5,7 @@ import numpy as np, pandas as pd, matplotlib.pyplot as plt
 ```
 
 **Torch-Specific Imports**
+
 - Hauptbibliothek und wesentliche Werkzeuge zur Spezifikation sequentiell strukturierter Netzwerke.
 
 ```python=
@@ -23,7 +24,6 @@ from torchinfo import summary
 ```
 
 - `pytorch_lightning` vereinfacht die Spezifikation, Anpassung und Bewertung von Modellen, indem es Boilerplate-Code reduziert.
-
 
 ```python=
 from pytorch_lightning import Trainer
@@ -59,6 +59,7 @@ from ISLP.torch import (SimpleDataModule, SimpleModule,
 ```
 
 # 2. MNIST
+
 - Geändertes Nationales Institut für Standards und Technologie.
 - Sammlung handgeschriebener Ziffern.
 - Enthält 60.000 Trainingsbilder und 10.000 Testbilder.
@@ -139,13 +140,13 @@ for idx, (X_ ,Y_) in enumerate(mnist_dataModule.train_dataloader()):
 
 - Definiere die Klasse MINISTModel, die von `nn.Module` erbt.
 - Schicht 1: `nn.Sequential` ist ein Container für eine Sequenz von Schichten.
-    - `nn.Flatten()` flacht jedes 1x28x28 Bild zu einem 1x784 Tensor ab.
-    - `nn.Linear(28*28, 256)` ist eine vollverbundene Schicht mit 784 Eingangs- und 256 Ausgangsmerkmalen.
-    - `nn.ReLU()` ist eine Aktivierungsfunktion.
-    - `nn.Dropout(0.4)` setzt zufällig 40% der Eingabeeinheiten bei jedem Update während des Trainings auf 0.
+  - `nn.Flatten()` flacht jedes 1x28x28 Bild zu einem 1x784 Tensor ab.
+  - `nn.Linear(28*28, 256)` ist eine vollverbundene Schicht mit 784 Eingangs- und 256 Ausgangsmerkmalen.
+  - `nn.ReLU()` ist eine Aktivierungsfunktion.
+  - `nn.Dropout(0.4)` setzt zufällig 40% der Eingabeeinheiten bei jedem Update während des Trainings auf 0.
 - Schicht 2: `nn.Sequential` ist ein Container für eine Sequenz von Schichten.
-    - `nn.Linear(256, 128)` ist eine Schicht mit 256 Eingangs- und 128 Ausgangsmerkmalen.
-    - `nn.ReLU()` und `nn.Dropout(0.3)` haben denselben Zweck wie in der ersten Schicht.
+  - `nn.Linear(256, 128)` ist eine Schicht mit 256 Eingangs- und 128 Ausgangsmerkmalen.
+  - `nn.ReLU()` und `nn.Dropout(0.3)` haben denselben Zweck wie in der ersten Schicht.
 - Forward-Methode: kombiniert die beiden Schichten mit einer abschließenden vollverbundenen Schicht mit 128 Eingangs- und 10 Ausgangsmerkmalen.
 - Die Forward-Methode des Netzwerks nimmt einen Eingabetensor `x` und leitet ihn durch die definierte Schichtsequenz in `self_forward`.
 
@@ -218,7 +219,7 @@ summary(mnist_model, input_data=X_,
     ======================================================================
 
 - Wir verwenden `SimpleModule.classification()`, das die Cross-Entropy-Verlustfunktion anstelle von Mean Squared Error (MSE) verwendet.
-    - Wir müssen die Anzahl der Klassen angeben.
+  - Wir müssen die Anzahl der Klassen angeben.
 - `SimpleModule.classification()` enthält standardmäßig eine Genauigkeitsmetrik. Weitere Klassifikationsmetriken können aus `torchmetrics` hinzugefügt werden.
 
 ```python=
@@ -227,9 +228,9 @@ mnist_logger = CSVLogger('logs', name='MNIST')
 ```
 
 - Wir definieren ein `Trainer`-Objekt, um das Modell zu trainieren:
-    - `deterministic=True` sorgt für Reproduzierbarkeit.
-    - `enable_process_bar=False` unterdrückt die Fortschrittsanzeige.
-    - `callbacks=[ErrorTracker()]` sammelt Ziele und Vorhersagen während der Validierung oder des Tests, um Metriken über den gesamten Validierungs- oder Testdatensatz zu berechnen.
+  - `deterministic=True` sorgt für Reproduzierbarkeit.
+  - `enable_process_bar=False` unterdrückt die Fortschrittsanzeige.
+  - `callbacks=[ErrorTracker()]` sammelt Ziele und Vorhersagen während der Validierung oder des Tests, um Metriken über den gesamten Validierungs- oder Testdatensatz zu berechnen.
 - Zur Erinnerung: Wir haben eine Validierungsaufteilung von 20% festgelegt, daher wird das Training auf 48.000 von 60.000 Bildern durchgeführt.
 - SGD verwendet Batches von 256 Beobachtungen für die Gradientenberechnung, was zu 188 Gradienten-Schritten pro Epoche führt. (256*188 = 48.128)
 
@@ -269,7 +270,7 @@ mnist_results.plot(x='epoch', y='valid_accuracy', ax=ax, label='Validation', mar
 ax.set_ylabel('Accuracy');
 ```
 
-![](Figures\mnist_40_0.png)
+<img title="" src="Figures\mnist_40_0.png" alt="" width="495">
 
 - Wir verwenden die `predict()`-Methode des Trainers, um das Modell mit den Testdaten zu evaluieren.
 - Das Modell erreicht eine Genauigkeit von 97% auf den Testdaten.
