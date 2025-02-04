@@ -36,9 +36,9 @@ Smarket = load_data('Smarket')
 Smarket.head()
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th></th>
   <th>Year</th>
   <th>Lag1</th>
@@ -119,9 +119,9 @@ Smarket.head()
 Smarket.describe().round(1)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th></th>
   <th>Year</th>
   <th>Lag1</th>
@@ -238,9 +238,9 @@ Smarket.Direction.value_counts(normalize=True)
 Smarket.corr(numeric_only=True).round(2)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th></th>
   <th>Year</th>
   <th>Lag1</th>
@@ -351,7 +351,7 @@ Smarket.corr(numeric_only=True).round(2)
 Smarket.plot(y='Volume');
 ```
 
-![](Figures/Smarket_8_0.png)
+<img src="Figures/Smarket_8_0.png" title="" alt="" width="414">
 
 # 3. Logistische Regression
 
@@ -369,9 +369,9 @@ glm = sm.GLM(y, X, family=sm.families.Binomial()).fit()
 summarize(results)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th></th>
   <th>coef</th>
   <th>std err</th>
@@ -456,9 +456,9 @@ labels[probs>0.5] = "Up"
 confusion_table(labels, Smarket.Direction)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
@@ -518,9 +518,9 @@ L_test = D.loc[~train]
 confusion_table(labels, L_test)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
@@ -571,9 +571,9 @@ labels[probs>0.5] = 'Up'
 confusion_table(labels, L_test)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
@@ -642,9 +642,9 @@ df = pd.concat([X_train, L_train], axis=1)
 df.groupby('Direction', observed=True)[['Lag1', 'Lag2']].mean()
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Direction\</th>
   <th>Lag1</th>
   <th>Lag2</th>
@@ -722,9 +722,9 @@ lda_pred = lda.predict(X_test)
 confusion_table(lda_pred, L_test)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
@@ -808,9 +808,9 @@ qda_pred = qda.predict(X_test)
 confusion_table(qda_pred, L_test)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
@@ -864,9 +864,9 @@ NB.var_
 df.groupby('Direction', observed=True)[['Lag1', 'Lag2']].var(ddof=0)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Direction\</th>
   <th>Lag1</th>
   <th>Lag2</th>
@@ -889,9 +889,9 @@ nb_labels = NB.predict(X_test)
 confusion_table(nb_labels, L_test)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
@@ -927,9 +927,9 @@ knn1_pred = knn1.predict(X_test)
 confusion_table(knn1_pred, L_test)
 ```
 
-<table class="dataframe">
+<table>
   <thead>
-<tr style="text-align: right;">
+<tr>
   <th>Predicted\Truth</th>
   <th>Down</th>
   <th>Up</th>
