@@ -135,17 +135,6 @@ Smarket.describe().round(1)
   </thead>
   <tbody>
 <tr>
-  <th>count</th>
-  <td>1250.0</td>
-  <td>1250.0</td>
-  <td>1250.0</td>
-  <td>1250.0</td>
-  <td>1250.0</td>
-  <td>1250.0</td>
-  <td>1250.0</td>
-  <td>1250.0</td>
-</tr>
-<tr>
   <th>mean</th>
   <td>2003.0</td>
   <td>0.0</td>
@@ -351,7 +340,7 @@ Smarket.corr(numeric_only=True).round(2)
 Smarket.plot(y='Volume');
 ```
 
-<img src="Figures/Smarket_8_0.png" title="" alt="" width="414">
+<img title="" src="Figures/Smarket_8_0.png" alt="" width="322">
 
 # 3. Logistische Regression
 
@@ -484,9 +473,8 @@ confusion_table(labels, Smarket.Direction)
 
 ```python=
 (507+145)/1250, np.mean(labels == Smarket.Direction)
+# (0.5216, 0.5216)
 ```
-
-(0.5216, 0.5216)
 
 - 52,2% Genauigkeit des Modells irreführend, da Trainings- und Testdaten identisch sind. Testfehler wird unterschätzt.
 - Besser: Modell mit Teil der Daten trainieren und mit zurückgehaltenen Daten testen.
@@ -495,10 +483,8 @@ confusion_table(labels, Smarket.Direction)
 train = (Smarket.Year < 2005)
 Smarket_train = Smarket.loc[train]
 Smarket_test = Smarket.loc[~train]
-Smarket_test.shape
+# Shape of Smarket_test: 252 x 9
 ```
-
-(252, 9)
 
 - `train` Boolescher Vektor: 1.250 Elemente (`True` vor 2005, `False` 2005).
 - Logistische Regression auf Daten vor 2005, Wahrscheinlichkeiten für 2005 (252 Beobachtungen) vorhersagen.
@@ -540,9 +526,8 @@ confusion_table(labels, L_test)
 
 ```python=
 np.mean(labels == L_test), np.mean(labels != L_test)
+# (0.480, 0.520)
 ```
-
-    (0.480, 0.520)
 
 - Testgenauigkeit: ca. 48%
 - Fehlerquote: ca. 52%
@@ -597,9 +582,8 @@ confusion_table(labels, L_test)
 
 ```python=
 (35+106)/252, 106/(106+76)
+# (0.5595, 0.5824)
 ```
-
-    (0.5595, 0.5824)
 
 - Gesamtgenauigkeit is 56%. Modell sagt 56% der Bewegungen korrekt voraus.
 - Bei vorhergesagtem Anstieg, mögliche Handelsstrategie erreicht die Genauigkeit 58% Genauigkeit .
@@ -611,11 +595,68 @@ newX = model_l1l2.transform(newdata)
 results.predict(newX)
 ```
 
-    00.479146
-    10.496094
+    00.479
+    10.496
     dtype: float64
 
 # 4. Lineare Diskriminanzanalyse
+
+## 4.1. Theorie
+
+- Logistische Regression modelliert die Wahrscheinlichkeit eines Ergebnisses (Y) basierend auf Prädiktorvariablen (X) mit der logistischen Funktion.
+- Eine andere Methode schätzt Wahrscheinlichkeiten, indem sie die Verteilung der Prädiktoren (X) für jedes Ergebnis modelliert und den Satz von Bayes verwendet.
+- Wenn die Prädiktoren normalverteilt sind, ähnelt diese Methode der logistischen Regression.
+- Andere Methoden statt logistische Regression sind nötig, weil:
+  - Instabile Ergebnisse bei gut getrennten Klassen.
+  - Bei kleinen Stichproben mit normalverteilten Prädiktoren können genauere Methoden existieren.
+  - Einige Methoden handhaben mehr als zwei Ergebnisklassen.
+- $\pi_k$ repräsentiert die priori Wahrscheinlichkeit, dass eine Beobachtung zur k-ten Klasse gehört. Zur Schätzung von $\pi_k$ berechnen wir den Anteil der Beobachtungen im Trainingssatz, die in die k-te Klasse fallen.
+- $f_k(X) \equiv \Pr(X | Y = k)$ repräsentiert die Dichtefunktion von X für die k-te Klasse. $f_k(x)$ ist groß, wenn eine Beobachtung in der k-ten Klasse wahrscheinlich $X \approx x$ hat, und klein, wenn es unwahrscheinlich ist.
+- $p_k(x) = \Pr(Y = k | X = x)$ ist die posteriori Wahrscheinlichkeit, dass eine Beobachtung $X = x$ zur k-ten Klasse gehört.
+  $\Pr(Y = k | X = x) = \frac{\pi_k f_k(x)}{\sum_{\ell=1}^{K} \pi_\ell f_\ell(x)}$
+- Zur Schätzung von $f_k(x)$ müssen wir vereinfachende Annahmen treffen.
+
+**LDA für p = 1**
+
+- Annahme: $f_k(x)$ ist normalverteilt.
+  $f_k(x) = \sqrt{\frac{1}{2\pi\sigma_k^2}} \exp \left( -\frac{1}{2\sigma_k^2} (x - \mu_k)^2 \right)$
+- Annahme: $\sigma_1^2 = \cdots = \sigma_K^2 = \sigma^2$
+- Die posteriori Wahrscheinlichkeit:
+  $p_k(x) = \frac{\pi_k \sqrt{\frac{1}{2\pi\sigma}} \exp \left( -\frac{1}{2\sigma^2} (x - \mu_k)^2 \right)}{\sum_{l=1}^{K} \pi_l \sqrt{\frac{1}{2\pi\sigma}} \exp \left( -\frac{1}{2\sigma^2} (x - \mu_l)^2 \right)}$
+  - Bayes-Klassifikator: Beobachtung wird der Klasse mit größtem $p_k(x)$ zugeordnet.
+- Logarithmieren und Umstellen von $p_k(x)$: 
+  $\delta_k(x) = \frac{x \cdot \mu_k}{\sigma^2} - \frac{\mu_k^2}{2\sigma^2} + \log(\pi_k)$ 
+  - Beobachtung wird der Klasse mit größtem $\delta_k(x)$ zugeordnet.
+  - ${\hat{\delta}}_k(x)$ ist eine lineare Funktion von $x$ → *Lineare* Diskriminanzfunktion.
+  - Beispiel: $K = 2$, $\pi_1 = \pi_2$ $\Rightarrow$ Bayes-Klassifikator: Klasse 1, wenn $2x (\mu_1 - \mu_2) > \mu_1^2 - \mu_2^2$, sonst Klasse 2.
+  - Bayes-Entscheidungsgrenze: $\delta_1(x) = \delta_2(x)$ $\Rightarrow$ $x = \frac{\mu_1 + \mu_2}{2}$.
+  - Abbildung 4.4: $n_1 = n_2 = 20$, $\hat{\pi}_1 = \hat{\pi}_2$ $\Rightarrow$ Entscheidungsgrenze: $(\hat{\mu}_1 + \hat{\mu}_2)/2$
+    - LDA-Fehlerrate: 11,1 %, Bayes-Fehlerrate: 10,6 %
+
+<img title="" src="Figures\Theo_4.4.png" alt="Abbildung 4.4" width="882">
+
+- Schätzer von $\mu_1,\ldots,\mu_k,\ \pi_1,\ldots,\pi_K,\ \sigma^2$:
+  ${\hat{\mu}}_k\ =\frac{1}{n_k}\sum_{i:y_i=k} x_i$
+  ${\hat{\sigma}}^2=\frac{1}{n-K}\sum_{k=1}^{K}\sum_{i:y_i=k}\left(x_i-{\hat{\mu}}_k\right)^2$
+  ${\hat{\pi}}_k=\frac{n_k}{n}$
+
+**LDA für p > 1**
+
+- Annahme: $X = (X_1, X_2, \ldots, X_p)$ ist multivariat normalverteilt, mit klassenspezifischem Mittelwert und gemeinsamer Kovarianzmatrix.
+  - Die multivariate Gauß-Verteilung nimmt an, dass jeder Prädiktor einer eindimensionalen Normalverteilung folgt.
+  - Die Oberfläche hat eine Glockenform, wenn $\mathrm{var}(X_1) = \mathrm{var}(X_2)$ und $\mathrm{cor}(X_1, X_2)=0$. Diese Form wird verzerrt, wenn Prädiktoren korreliert sind oder ungleiche Varianzen haben.
+  - $f(\mathbf{x}) = \frac{1}{(2\pi)^\frac{p}{2} \left|\mathbf{\Sigma}\right|^\frac{1}{2}} \exp{\left(-\frac{1}{2} (\mathbf{x} - \mathbf{\mu})^T \mathbf{\Sigma}^{-1} (\mathbf{x} - \mathbf{\mu})\right)}$
+- LDA-Klassifikator für $p > 1$: Annahme, dass Beobachtungen der $k$-ten Klasse multivariat normalverteilt sind, $N(\mu_k, \Sigma)$
+- Bayes-Klassifikator: $\delta_k(x) = x^T \Sigma^{-1} \mu_k - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k + \log \pi_k$
+- Bayes-Entscheidungsgrenzen: $\delta_k(x) = \delta_\ell(x)$ für $k \neq \ell$
+- Beispiel mit drei Klassen.
+  - Beobachtungen jeder Klasse stammen aus einer multivariaten Gauß-Verteilung mit $p = 2$, klassenspezifischem Mittelwertvektor und gemeinsamer Kovarianzmatrix.
+  - Links: Ellipsen zeigen 95 % der Wahrscheinlichkeit für jede der drei Klassen. Die gestrichelten Linien sind die Bayes-Entscheidungsgrenzen.
+  - Rechts: 20 Beobachtungen wurden aus jeder Klasse generiert. Die LDA-Entscheidungsgrenzen sind mit durchgezogenen schwarzen Linien markiert. Die Bayes-Entscheidungsgrenzen sind erneut als gestrichelte Linien dargestellt.
+
+<img title="" src="Figures\Theo_4.6.png" alt="Abbildung 4.6" width="866">
+
+## 4.2. Anwendung
 
 - Da `LDA` automatisch einen Interzept hinzufügt, entfernen wir die Interzept-Spalte aus `X_train` und `X_test`.
 - Wir verwenden die Labels direkt anstelle von Boolean-Vektoren `y_train`.
@@ -667,15 +708,13 @@ df.groupby('Direction', observed=True)[['Lag1', 'Lag2']].mean()
 
 ```python=
 lda.priors_
+# array([0.492, 0.508])
 ```
-
-    array([0.492, 0.508])
 
 ```python=
 lda.classes_
+# array(['Down', 'Up'], dtype='<U4')
 ```
-
-array(['Down', 'Up'], dtype='<U4')
 
 - Das Ergebnis zeigt $\hat\pi_{Down}=0.492$ und $\hat\pi_{Up}=0.508$.
 - Wir können dies selbst berechnen.
@@ -685,8 +724,8 @@ L_train.value_counts(normalize=True)
 ```
 
     Direction
-    Up    0.508016
-    Down  0.491984
+    Up    0.508
+    Down  0.492
     Name: proportion, dtype: float64
 
 - Bei LDA teilen alle Klassen (Down und Up) die gleiche Kovarianzstruktur.
@@ -758,20 +797,35 @@ lda_prob[:3]
 ```python=
 np.all(np.where(lda_prob[:,1] >= 0.5, 'Up','Down') == lda_pred),
 np.all([lda.classes_[i] for i in np.argmax(lda_prob, 1)] == lda_pred)
+# (True, True)
 ```
-
-    (True, True)
 
 ```python=
 max(lda_prob[:,0])
+# 0.5202
 ```
-
-    0.5202
 
 - Höchste Abnahmewahrscheinlichkeit: 52,02%.
 - `sklearn` LDA-Muster: Klassifikator erstellen, mit `fit()` anpassen, mit `predict()` vorhersagen.
 
 # 5. Quadratische Diskriminanzanalyse
+
+## 5.1. Theorie
+
+- LDA: Beobachtungen aus multivariater Gaußverteilung, gleiche Kovarianzmatrix für alle Klassen.
+- QDA: Beobachtungen aus Gaußverteilung, jede Klasse eigene Kovarianzmatrix $\Sigma_k$.
+- Unterschied LDA vs. QDA: Bias-Varianz-Kompromiss.
+  - LDA: gemeinsame Kovarianzmatrix, weniger flexibel, niedrigere Varianz, gut bei wenigen Trainingsbeobachtungen.
+  - QDA: separate Kovarianzmatrizen, höhere Varianz, besser bei großen Trainingssätzen.
+- $\delta_k(x) = -\frac{1}{2}(x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k) - \frac{1}{2} \log |\Sigma_k| + \log \pi_k$
+  - Bayes-Klassifikator ordnet Klasse mit größtem $\delta_k(x)$ zu.
+- Beispiel: 
+  - Links: Die Bayes- (gestrichelt), LDA- (gepunktet) und QDA- (durchgezogen) Entscheidungsgrenzen für ein Zweiklassenproblem mit $\Sigma_1 = \Sigma_2$. Die Schattierung zeigt die QDA-Entscheidungsregel. Da die Bayes-Entscheidungsgrenze linear ist, wird sie von LDA genauer approximiert als von QDA.
+  - Rechts: Details wie im linken Panel, außer dass $\Sigma_1 \neq \Sigma_2$. Da die Bayes-Entscheidungsgrenze nicht linear ist, wird sie von QDA genauer approximiert als von LDA.
+
+<img title="" src="Figures\Theo_4.9.png" alt="Abbildung 4.9" width="783">
+
+## 5.2. Anwendung
 
 - Wir verwenden `QuadraticDiscriminantAnalysis()` abgekürzt als `QDA()`. Syntax ist ähnlich wie bei `LDA()`.
 
@@ -799,9 +853,8 @@ qda.covariance_[0]
 
 ```python=
 qda.scalings_
+# [array([1.56294495, 1.47927279]), array([1.53455065, 1.47272326])]
 ```
-
-    [array([1.56294495, 1.47927279]), array([1.53455065, 1.47272326])]
 
 ```python=
 qda_pred = qda.predict(X_test)
@@ -830,14 +883,32 @@ confusion_table(qda_pred, L_test)
 
 ```python=
 np.mean(qda_pred == L_test)
+# 0.599
 ```
-
-    0.599
 
 - QDA-Vorhersagen sind fast 60% genau. Es ist beeindruckend.
 - Dies deutet darauf hin, dass QDA Beziehungen besser erfassen kann als LDA und logistische Regression.
 
 # 6. Naive Bayes
+
+## 6.1. Theorie
+
+- Schätzt $\pi_1, \ldots, \pi_K$ als Anteil der Trainingsbeobachtungen pro Klasse.
+- Schätzt $f_1(x), \ldots, f_K(x)$ unter Annahme unabhängiger Prädiktoren innerhalb jeder Klasse.
+  - $f_k(x) = f_{k1}(x_1) \times f_{k2}(x_2) \times \cdots \times f_{kp}(x_p)$
+  - Schätzung von $f_{kj} \equiv Pr(X_j \mid Y = k): 
+    - Quantitativ: (X_j \mid Y = k) \sim N(\mu_{jk}, \sigma_{jk}^2)$ oder mit nichtparametrischen Methoden (Histogramm, Kernel Density Estimator).
+    - Qualitativ: Anteil der Trainingsbeobachtungen für jede Klasse.
+- Vereinfachung durch Unabhängigkeitsannahme: keine Berücksichtigung der gemeinsamen Verteilung der Prädiktoren.
+- Naive Bayes führt oft zu guten Ergebnissen, besonders bei kleinen n im Vergleich zu p
+- Beispiel: Klassifikation mit $p = 3$ Prädiktoren und $K = 2$ Klassen.
+  - Die ersten beiden Prädiktoren sind quantitativ, der dritte Prädiktor ist qualitativ mit drei Stufen.
+  - Angenommen, $\hat{\pi}_1 = \hat{\pi}_2 = 0.5$.
+  - Wenn die a priori Wahrscheinlichkeiten für die beiden Klassen gleich sind, hat $x^* = (0.4, 1.5, 1)^T$ eine a posteriori Wahrscheinlichkeit von 94,4 %, zur ersten Klasse zu gehören.
+
+<img title="" src="Figures\Theo_4.10.png" alt="Abbildung 4.10" width="458">
+
+## 6.2. Anwendung
 
 - - Naive-Bayes-Modell mit `GaussianNB()` auf `Smarket`-Daten angepasst, ähnlich wie `LDA()` und `QDA()`.
 - Standardmäßig Gaußsche Verteilung, Kerndichtemethode auch möglich.
@@ -845,9 +916,8 @@ np.mean(qda_pred == L_test)
 ```python=
 NB = GaussianNB().fit(X_train, L_train);
 NB.classes_
+# array(['Down', 'Up'], dtype='<U4')
 ```
-
-    array(['Down', 'Up'], dtype='<U4')
 
 - `NB.theta_` und `NB.class_prior_` liefern die gleichen Ergebnisse wie `lda.means_` und `lda.priors_` sowie `qda.means_` und `qda.priors_`.
 - `NB.var_` liefert die Varianz jedes Prädiktors für jede Klasse.
@@ -949,9 +1019,8 @@ confusion_table(knn1_pred, L_test)
 
 ```python=
 (83+43)/252, np.mean(knn1_pred == L_test)
+# (0.5, 0.5)
 ```
-
-    (0.5, 0.5)
 
 - K=1 liefert nur (43+83)/252 = 50% Genauigkeit, wahrscheinlich wegen zu flexibler Anpassung.
 - Mit K=3 wiederholen wir die Analyse.
@@ -960,9 +1029,111 @@ confusion_table(knn1_pred, L_test)
 knn3 = KNeighborsClassifier(n_neighbors=3).fit(X_train, L_train)
 knn3_pred = knn3.predict(X_test)
 np.mean(knn3_pred == L_test)
+# 0.532
 ```
-
-    0.5317460317460317
 
 - Die Ergebnisse verbesserten sich leicht, aber weiteres Erhöhen von K bringt keinen Nutzen. QDA schneidet am besten ab.
 - KNN ist auf `Smarket`-Daten unterlegen, liefert aber oft anderswo beeindruckende Ergebnisse.
+
+# 8. Vergleich
+
+## Analytischer Vergleich
+
+- Ziel: Klasse maximieren, die $\Pr(Y = k \mid X = x)$ maximiert
+
+**LDA:**
+
+- Annahme: Prädiktoren folgen multivariater Normalverteilung
+- $\log \left( \frac{\Pr(Y = k \mid X = x)}{\Pr(Y = K \mid X = x)} \right) = a_k + \sum_{j=1}^{p} b_{kj} x_j$
+- $\log \left( \frac{\Pr(Y = k \mid X = x)}{\Pr(Y = K \mid X = x)} \right)$ ist linear in $x$
+
+**QDA:**
+
+- Annahme: Prädiktoren folgen multivariater Normalverteilung mit klassen-spezifischer Kovarianzmatrix
+- $\log \left( \frac{\Pr(Y = k \mid X = x)}{\Pr(Y = K \mid X = x)} \right) = a_k + \sum_{j=1}^{p} b_{kj} x_j + \sum_{j=1}^{p} \sum_{l=1}^{p} c_{kjl} x_j x_l$
+- $\log \left( \frac{\Pr(Y = k \mid X = x)}{\Pr(Y = K \mid X = x)} \right)$ ist quadratisch in $x$
+
+**Naive Bayes:**
+
+- Annahme: Prädiktoren sind innerhalb jeder Klasse unabhängig
+- $f_k(x)$ als Produkt von $p$ eindimensionalen Funktionen $f_{kj}(x_j)$
+- $\log \left( \frac{\Pr(Y = k \mid X = x)}{\Pr(Y = K \mid X = x)} \right) = a_k + \sum_{j=1}^{p} g_{kj}(x_j)$
+
+**Beobachtungen:**
+
+- LDA ist Spezialfall von QDA mit $c_{kjl} = 0$
+- Jeder Klassifikator mit linearer Entscheidungsgrenze ist Spezialfall von naive Bayes
+- Naive Bayes mit $f_{kj}(x_j) \sim N(\mu_{kj}, \sigma_j^2)$ ist Spezialfall von LDA mit diagonalem $\Sigma$
+- Weder QDA noch naive Bayes sind Spezialfälle des anderen
+
+**Logistische Regression:**
+
+- $\log \left( \frac{\Pr(Y = k \mid X = x)}{\Pr(Y = K \mid X = x)} \right) = \beta_{k0} + \sum_{j=1}^{p} \beta_{kj} x_j$
+- Linear in $x$, wie LDA
+- LDA besser bei normalverteilten Prädiktoren, logistische Regression besser bei Verstoß gegen Normalitätsannahme
+
+**K-Nearest Neighbors (KNN):**
+
+- Non-parametrischer Ansatz, keine Annahmen über Entscheidungsgrenze
+- Dominiert LDA und logistische Regression bei hoch nicht-linearen Entscheidungsgrenzen, wenn $n$ groß und $p$ klein ist
+- Erfordert viele Beobachtungen relativ zu Prädiktoren ($n$ viel größer als $p$)
+- QDA bevorzugt bei nicht-linearen Entscheidungsgrenzen und moderatem $n$ oder nicht kleinem $p$
+- KNN gibt keine wichtigen Prädiktoren an, im Gegensatz zur logistischen Regression
+
+## Empirischer Vergleich
+
+- Sechs Szenarien mit binärer Klassifikation und 2 quantiativen Prädiktore
+- Drei Szenarien (1,2,3) mit linearer Entscheidungsgrenze, drei (4,5,6) mit nicht-linearer Entscheidungsgrenze
+
+**Szenario 1:**
+
+- 20 Trainingsbeobachtungen pro Klasse, unkorrelierte Normalverteilung
+- LDA hat gut abgeschnitten, da es dieses Modell annimmt.
+- Logistische Regression war auch gut, da sie eine lineare Entscheidungsgrenze annimmt.
+- KNN schnitt schlecht ab wegen hoher Varianz ohne Bias-Reduktion.
+- QDA schnitt schlechter als LDA ab, da es zu flexibel war.
+- Naive Bayes war etwas besser als QDA, da die Annahme unabhängiger Prädiktoren korrekt ist.
+
+**Szenario 2:**
+
+- Wie Szenario 1, aber Korrelation zwischen zwei Prädiktore innerhalb der Klassen von -0.5
+  - Die t-Verteilung neigt dazu, extremere Punkte als die Normalverteilung zu liefern.
+- Ähnliche Leistung wie in Szenario 1, aber naive Bayes schneidet schlecht ab, weil die Annahme verletzt wird.
+
+**Szenario 3:**
+
+- Wie Szenario 2, aber t-Verteilung, 50 Beobachtungen pro Klasse
+- Beobachtungen stammen nicht aus einer Normalverteilung → Annahme von LDA und QDA verletzt.
+- Logistische Regression übertrifft LDA.
+- QDA schneidet wegen Nicht-Normalität schlechter ab.
+- Naive Bayes schneidet schlecht ab wegen verletzter Unabhängigkeitsannahme.
+
+**Szenario 4:**
+
+- Daten wurden aus einer Normalverteilung generiert, mit einer Korrelation von 0.5 zwischen den Prädiktoren in der ersten Klasse und einer Korrelation von -0.5 zwischen den Prädiktoren in der zweiten Klasse.
+- Diese Einstellung entspricht der QDA-Annahme und führt zu quadratischen Entscheidungsgrenzen.
+- QDA am besten, naive Bayes schlecht wegen verletzter Unabhängigkeitsannahme.
+
+**Szenario 5:**
+
+- Daten stammen aus einer Normalverteilung mit unkorrelierten Prädiktoren.
+- Logistische Regression wurde auf eine komplizierte nichtlineare Funktion der Prädiktoren angewendet.
+- QDA und Naive Bayes schneiden besser ab.
+- KNN mit K = 1 liefert schlechte Ergebnisse wegen mangelnder Glättung.
+- KNN mit K, gewählt durch Kreuzvalidierung, liefert das beste Ergebnis dank seiner Flexibilität.
+
+**Szenario 6:**
+
+- Daten stammen aus einer Normalverteilung mit unterschiedlicher diagonaler Kovarianzmatrix für jede Klasse.
+- Kleine Stichprobengröße: n = 6 pro Klasse.
+- Naive Bayes schneidet gut ab, da seine Annahmen erfüllt sind.
+- LDA und logistische Regression schneiden schlecht ab wegen nichtlinearer Entscheidungsgrenze (ungleiche Kovarianzmatrizen).
+- QDA und KNN leiden unter kleiner Stichprobe
+
+**Fazit:**
+
+- Kein Verfahren dominiert immer
+- Lineare Entscheidungsgrenzen: LDA und logistische Regression gut
+- Moderat nicht-lineare Grenzen: QDA oder naive Bayes besser
+- Komplexe Grenzen: Nicht-parametrische Methoden wie KNN besser, aber Wahl der Glattheit wichtig
+- Flexible Versionen durch Transformationen der Prädiktoren möglich (z.B. $X^2$, $X^3$, $X^4$)
