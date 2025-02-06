@@ -73,11 +73,6 @@ WageDF.head()
       <th>race</th>
       <th>education</th>
       <th>region</th>
-      <th>jobclass</th>
-      <th>health</th>
-      <th>health_ins</th>
-      <th>logwage</th>
-      <th>wage</th>
     </tr>
   </thead>
   <tbody>
@@ -89,11 +84,6 @@ WageDF.head()
       <td>1. White</td>
       <td>1. &lt; HS Grad</td>
       <td>2. Middle Atlantic</td>
-      <td>1. Industrial</td>
-      <td>1. &lt;=Good</td>
-      <td>2. No</td>
-      <td>4.318063</td>
-      <td>75.043154</td>
     </tr>
     <tr>
       <th>1</th>
@@ -103,6 +93,32 @@ WageDF.head()
       <td>1. White</td>
       <td>4. College Grad</td>
       <td>2. Middle Atlantic</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>jobclass</th>
+      <th>health</th>
+      <th>health_ins</th>
+      <th>logwage</th>
+      <th>wage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1. Industrial</td>
+      <td>1. &lt;=Good</td>
+      <td>2. No</td>
+      <td>4.318063</td>
+      <td>75.043154</td>
+    </tr>
+    <tr>
+      <th>1</th>
       <td>2. Information</td>
       <td>2. &gt;=Very Good</td>
       <td>2. No</td>
@@ -471,6 +487,7 @@ lin_reg2 = sm.OLS(WageDF.wage, agePolyDF5LI[1]).fit()
 lin_reg3 = sm.OLS(WageDF.wage, agePolyDF5LI[2]).fit()
 lin_reg4 = sm.OLS(WageDF.wage, agePolyDF5LI[3]).fit()
 lin_reg5 = sm.OLS(WageDF.wage, agePolyDF5LI[4]).fit()
+# anova_lm(*[sm.OLS(WageDF.wage, DF).fit() for DF in agePolyDF5LI])
 ```
 
 ```python=
@@ -539,14 +556,6 @@ anova_lm(lin_reg1, lin_reg2, lin_reg3, lin_reg4, lin_reg5)
   </tbody>
 </table>
 
-```python=
-# Faster way to run an ANOVA on the models
-anova_lm(*[sm.OLS(WageDF.wage, DF).fit() for DF in agePolyDF5LI])
-# [sm.OLS(y, X_).fit() for X_ in Xs] is a list of 5 linear models.
-# The * operator is used to unpack the list of fitted models into separate arguments.
-# This results in the same result as above.
-```
-
 - Modellvergleich:
   - Modell[0] (linear) vs. Modell[1] (quadratisch): 
     - p-Wert: 0.000 
@@ -562,7 +571,7 @@ anova_lm(*[sm.OLS(WageDF.wage, DF).fit() for DF in agePolyDF5LI])
 
 - Alternativ zu ANOVA:
   - `poly()` generiert orthogonale Polynome
-  - Prädiktoren in `poly_age.transform(Wage)` sind unkorreliert 
+  - Prädiktoren sind unkorreliert 
   - Einfachere Bestimmung der p-Werte
 
 ```python=
@@ -965,8 +974,7 @@ ax.set_xlabel('age'); ax.set_ylabel('wage'); ax.set_title('Step Function');
   - Regression:
     - Intercept und 3 + K Prädiktoren: $X, X^2, X^3, h(X, \xi_1), \ldots, h(X, \xi_K)$
     - $\xi_1, \ldots, \xi_K$ sind die Knoten.
-    - Insgesamt gibt es 4 + K Koeffizienten.
-    - Ein kubischer Spline benötigt daher K + 4 Freiheitsgrade.
+    - Insgesamt gibt es 4 + K Koeffizienten -> 4 + K Freiheitsgrade.
   - Varianz:
     - Splines haben hohe Varianz an den Rändern der Prädiktoren, wenn X sehr klein oder sehr groß ist.
     - Ein natürlicher Spline hat zusätzliche Randbedingungen:
@@ -976,6 +984,7 @@ ax.set_xlabel('age'); ax.set_ylabel('wage'); ax.set_title('Step Function');
 ```python=
 # 1. Using a matrix of basis functions with intercept
 ageBSDF = BSpline(internal_knots=[25,40,60], intercept=True).fit_transform(WageDF.age)
+# BSpline() has intercept=False as default
 # Shape of bs_age is 3000 x 7
 ageBSDF.head(3)
 ```
@@ -1205,7 +1214,7 @@ BSpline(internal_knots=[25,40,60], lower_bound=18.0, upper_bound=80.0)
 
 ```python=
 ageNoBSDF = MS([bs('age', internal_knots=[25,40,60], name='bs(age)')]).fit_transform(WageDF)
-ageNoBSDF.head(3)
+ageNoBSDF.head(2)
 ```
 
 <table class="dataframe">
@@ -1240,16 +1249,6 @@ ageNoBSDF.head(3)
       <td>0.033395</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1.0</td>
-      <td>0.000000</td>
-      <td>0.114796</td>
-      <td>0.618564</td>
-      <td>0.262733</td>
-      <td>0.003906</td>
       <td>0.0</td>
     </tr>
   </tbody>
@@ -1338,13 +1337,13 @@ summarize(sm.OLS(WageDF.wage, ageNoBSDF).fit())
 BSpline(df=6).fit(WageDF.age).internal_knots_
 ```
 
-    array([33.75, 42, 51])
+	array([33.75, 42, 51])
 
 ```python=
 BSpline(df=3, degree=0).fit(WageDF.age).internal_knots_
 ```
 
-    array([33.75, 42, 51])
+	array([33.75, 42, 51])
 
 ```python=
 # Create the matrix of basis functions
@@ -1448,49 +1447,10 @@ summarize(sm.OLS(WageDF.wage, stepBSDF).fit())
 stepIIBSDF = MS( [bs('age', df=4, degree=0, intercept=True)],intercept=False )
 stepIIBSDF = stepIIBSDF.fit_transform(WageDF)
 stepIIBSDF.head(3)
+# Alternative way by BSpline()
+# BSpline(df=4, degree=0, intercept=True).fit_transform(WageDF.age)
 ```
 bs(age, df=4, degree=0)
-<table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>[0]</th>
-      <th>[1]</th>
-      <th>[2]</th>
-      <th>[3]</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-
-```python=
-# Alternative way by BSpline()
-BSpline(df=4, degree=0, intercept=True).fit_transform(WageDF.age).head(3)
-```
-
-BSpline(degree=0, df=4, intercept=True, lower_bound=18.0, upper_bound=80.0)
 <table class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1572,73 +1532,8 @@ summarize(sm.OLS(WageDF.wage, stepIIBSDF).fit())
   </tbody>
 </table>
 
-
-
-```python=
-# This part is for understanding more about BSpline
-Xbs0 = BSpline(df=3, degree=0, intercept=False).fit_transform(WageDF.age)
-summarize(sm.OLS(WageDF.wage, Xbs0).fit())
-```
-
-BSpline(degree=0, df=3, lower_bound=18.0, upper_bound=80.0)
-<table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>coef</th>
-      <th>std err</th>
-      <th>t</th>
-      <th>P&gt;|t|</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>[0]</th>
-      <td>116.5074</td>
-      <td>2.398</td>
-      <td>48.592</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>[1]</th>
-      <td>118.9660</td>
-      <td>2.165</td>
-      <td>54.950</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>[2]</th>
-      <td>116.9398</td>
-      <td>2.259</td>
-      <td>51.769</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-
-```python=
-BSpline(df=3, degree=0, intercept=False).fit(WageDF.age).internal_knots_
-```
-
-    array([33.75, 42.  , 51.  ])
-
-```python=
-BSpline(df=4, degree=0, intercept=True).fit(WageDF.age).internal_knots_
-```
-
-    array([33.75, 42.  , 51.  ])
-
-```python=
-BSpline(df=3, degree=0, intercept=True).fit(WageDF.age).internal_knots_
-# End of the part
-```
-
-    array([37., 48.])
-
 ## 6.2. Natural Splines
-
-- Erstellung einer Matrix von Basisfunktionen für natürliche Splines
-  - Verwendung von `NaturalSpline()` oder `ns()` in `MS()`
+- Verwendung von `NaturalSpline()` oder `ns()` in `MS()`
 
 ```python=
 NaturalSpline(internal_knots=[25,40,60]).fit_transform(WageDF.age).head(3)
@@ -1726,7 +1621,6 @@ ns(age, internal_knots=[25, 40, 60])
 </table>
 
 ```python=
-# Fit the model
 summarize(sm.OLS(WageDF.wage, ageNSDF).fit())
 ```
 
@@ -1781,46 +1675,7 @@ summarize(sm.OLS(WageDF.wage, ageNSDF).fit())
 
 - Natürliche Splines:
   - Erste und letzte Basisfunktionen sind linear
-  - Freiheitsgrade: 4 + K - 2 = K + 2 (Kubische Splines mit K Knoten inkl. Intercept)
-
-```python=
-NaturalSpline(df=4).fit_transform(WageDF.age).head(3)
-```
-
-<table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>NaturalSpline(df=4)[0]</th>
-      <th>NaturalSpline(df=4)[1]</th>
-      <th>NaturalSpline(df=4)[2]</th>
-      <th>NaturalSpline(df=4)[3]</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0.017316</td>
-      <td>-0.137954</td>
-      <td>0.318722</td>
-      <td>-0.180767</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.751086</td>
-      <td>0.166050</td>
-      <td>0.091316</td>
-      <td>-0.050613</td>
-    </tr>
-  </tbody>
-</table>
+  - Freiheitsgrade: 4 + K - 2 = K + 2 (Kubische Splines mit K Knoten + Intercept)
 
 ```python=
 NaturalSpline(df=4).fit(WageDF.age).internal_knots_
@@ -1866,73 +1721,66 @@ axs[1].set_xlabel('age'); axs[1].set_title('Natural spline');
 
 ![](Figures/wage_72_0.png)
 
-- Wahl der Anzahl und Position der Knoten
-  - Platzierung der Knoten
-    - Mehr Knoten in Bereichen mit schneller Funktionsänderung.
+- Wahl der Knoten
+  - Platzierung:
+    - Mehr Knoten bei schneller Funktionsänderung.
     - Weniger Knoten in stabilen Bereichen.
-    - Häufig werden Knoten gleichmäßig verteilt.
-    - Beispiel: Knoten bei den 25., 50. und 75. Perzentilen des Alters bei vier Freiheitsgraden.
+    - Oft gleichmäßig verteilt.
+    - Beispiel: Knoten bei den 25., 50. und 75. Perzentilen des Alters.
   
-  - Anzahl der Knoten
-    - Unterschiedliche Knotenzahlen ausprobieren und die beste Kurve wählen.
-    - Objektiver: Kreuzvalidierung verwenden.
-    - Methode: Teil der Daten entfernen, Spline mit bestimmter Knotenzahl anpassen, Vorhersagen für entfernte Daten machen, RSS berechnen.
-    - Kleinster RSS bestimmt die optimale Knotenzahl.
+  - Anzahl:
+    - Verschiedene Knotenzahlen testen und beste Kurve wählen.
+    - Kreuzvalidierung verwenden.
+    - Methode: Daten teilen, Spline anpassen, Vorhersagen machen, RSS berechnen.
+    - Kleinster RSS bestimmt optimale Knotenzahl.
 
-  - Additive Spline-Modelle
-    - Anpassung an mehrere Variablen gleichzeitig.
-    - Freiheitsgrade für jede Variable wählen.
-    - Praktischer Ansatz: Für alle Variablen gleiche Freiheitsgrade, z.B. vier.
+  - Additive Spline-Modelle:
+    - Anpassung an mehrere Variablen.
+    - Gleiche Freiheitsgrade für alle Variablen, z.B. vier.
 
-- Vergleich zur Polynomregression
-  - Vergleich
-    - Natürlicher kubischer Spline mit 15 Freiheitsgraden vs. Polynomial 15. Grades.
-    - Polynomial zeigt unerwünschte Ergebnisse an den Rändern.
-    - Natürlicher kubischer Spline bietet eine bessere Anpassung.
-  
-  - Vorteile von Splines
-    - Stabilere Schätzungen durch feste Gradzahl und variierende Knotenzahl.
-    - Bessere Ergebnisse in Bereichen mit schneller Funktionsänderung.
+- Vergleich zur Polynomregression:
+  - Natürlicher kubischer Spline vs. Polynomial 15. Grades.
+  - Polynomial zeigt schlechte Ergebnisse an den Rändern.
+  - Natürlicher kubischer Spline passt besser.
+
+  - Vorteile von Splines:
+    - Stabilere Schätzungen.
+    - Bessere Ergebnisse bei schneller Funktionsänderung.
     - Weniger Knoten in stabilen Bereichen.
 
 
 # 7. Smoothing Splines
 
 - Einführung
-  - Regression Splines verwenden Knoten und Basisfunktionen zur Anpassung.
-  - Smoothing Splines nutzen eine andere Methode zur Glättung von Kurven.
+  - Regression Splines nutzen Knoten und Basisfunktionen.
+  - Smoothing Splines glätten Kurven anders.
 
 - Überblick
-  - Ziel: Funktion $g(x)$ finden, die die Daten gut anpasst.
+  - Ziel: Funktion $g(x)$, die Daten gut anpasst.
   - Minimierung von $\sum_{i=1}^{n} (y_i - g(x_i))^2 + \lambda \int (g''(t))^2 \, dt$.
-  - $\lambda$: Tuning-Parameter zur Kontrolle der Glätte.
-  - Glatte Funktion: $g''(t)$ misst die Rauheit der Funktion.
+  - $\lambda$: Tuning-Parameter für Glätte.
 
 - Eigenschaften
-  - $\lambda = 0$: Funktion interpoliert die Daten exakt.
-  - $\lambda \to \infty$: Funktion ist eine gerade Linie.
-  - $\lambda$ steuert den Bias-Varianz-Kompromiss.
-  - Minimierende Funktion ist ein natürlicher kubischer Spline mit Knoten bei $x_1, \ldots, x_n$.
+  - $\lambda = 0$: Exakte Interpolation.
+  - $\lambda \to \infty$: Gerade Linie.
+  - $\lambda$ steuert Bias-Varianz-Kompromiss.
+  - Minimierende Funktion ist ein natürlicher kubischer Spline.
 
 - Wahl des Smoothing Parameters λ
-  - $\lambda$ beeinflusst die effektiven Freiheitsgrade ${df}_λ$.
-  - ${df}_λ$ variiert von $n$ (flexibel) bis 2 (glatt).
-  - Effektive Freiheitsgrade messen die Flexibilität des Modells.
-  - $\hat{g}_{\lambda} = S_{\lambda} y$: Lösung für $\lambda$.
-  - ${df}_{\lambda} = \sum_{i=1}^{n} \{S_{\lambda}\}_{ii}$: Summe der Diagonalelemente von $S_{\lambda}$.
+  - $\lambda$ beeinflusst effektive Freiheitsgrade ${df}_\lambda$.
+  - ${df}_\lambda$ variiert von $n$ (flexibel) bis 2 (glatt).
 
 - Kreuzvalidierung
   - Wähle $\lambda$ durch Minimierung des kreuzvalidierten RSS.
-  - Leave-One-Out-Cross-Validation (LOOCV) kann effizient berechnet werden:
+  - LOOCV effizient berechnen:
       $RSS_{cv}(\lambda) = \sum_{i=1}^{n} \left[ \frac{y_i - \hat{g}_{\lambda}(x_i)}{1 - \{S_{\lambda}\}_{ii}} \right]^2$.
-  - Formel ermöglicht schnelle LOOCV-Berechnung.
 
 **ANWENDUNG**
+
 - Smoothing Spline
   - Spezifischer Typ des Generalized Additive Model (GAM)
   - Verwendet quadratischen Fehler für ein Merkmal
-- Verwendung von `pygam` zur Anpassung eines Smoothing Spline
-- Modellmatrix in `pygam`
+- Verwendung von `pygam`:
   - Jede Spalte entspricht einer Glättungsoperation:
     - 's' für Smoothing Spline
     - 'l' für linear
@@ -1978,8 +1826,7 @@ ax.set_xlabel('age'); ax.set_ylabel('wage'); ax.legend(title=r'$\lambda$');
 
 ![](Figures/wage_77_0.png)
 
-- `pygam` Paket
-  - Kann optimalen Glättungsparameter suchen.
+- `pygam` Paket kann optimalen Glättungsparameter suchen.
 
 ```python=
 # Search the best lambda and fit the model
@@ -1994,12 +1841,6 @@ ax.plot(age_grid100,
 ax.legend(title=r'$\lambda$'); fig
 ```
 
-      0% (0 of 11) |                         | Elapsed Time: 0:00:00 ETA:  --:--:--
-     18% (2 of 11) |####                     | Elapsed Time: 0:00:00 ETA:   0:00:00
-     45% (5 of 11) |###########              | Elapsed Time: 0:00:00 ETA:   0:00:00
-     72% (8 of 11) |##################       | Elapsed Time: 0:00:00 ETA:   0:00:00
-    100% (11 of 11) |########################| Elapsed Time: 0:00:00 Time:  0:00:00
-
 ![](Figures/wage_79_1.png)
 
 ```python=
@@ -2010,8 +1851,7 @@ print('Effective degrees of freedom:', GAM_opt.statistics_['edof'].round(3))
     Best lambda: [[251.189]]
     Effective degrees of freedom: 5.644
 
-- Wir verwenden das Paket `ISLP.pygam`, um den Freiheitsgrad des Glättungssplines festzulegen.
-- Zuerst bestimmen wir das Lambda, das 4 effektive Freiheitsgrade liefert.
+- Wir verwenden das Paket `ISLP.pygam`, um das Lambda zu finden, das 4 Freiheitsgrade liefert.
 
 ```python=
 # Get the smoothing spline term
@@ -2022,12 +1862,11 @@ print('Lambda for 4 effective degrees of freedom:', lam4)
 smooth_term.lam = lam4
 ```
 
-    Lambda for 4 effective degrees of freedom: [1446.68511262]
+    Lambda for 4 effective degrees of freedom: [1446.685]
     Effective degrees of freedom: 4.000000100003132
 
-- Wir plotten den Glättungsspline mit verschiedenen Freiheitsgraden.
-- Glättungssplines haben immer einen Achsenabschnitt.
-- Daher erhöhen wir die gewünschten Freiheitsgrade um 1.
+- Glättungsspline mit verschiedenen Freiheitsgraden plotten.
+- Achsenabschnitt erhöht Freiheitsgrade um 1.
   - Beispiel: `df=2` ergibt eine lineare Linie.
 
 ```python=
@@ -2048,7 +1887,7 @@ ax.legend(title='Degrees of freedom');
 ![](Figures/wage_84_0.png)
 
 # 8. GAMs mit mehreren Termen
-## Natürliche Splines of `age`, `year` and Category of `education`
+## 8.1. Natürliche Splines of `age`, `year` and Category of `education`
 - Verwenden natürliche Splines für `year` und `age`.
 - Behandeln `education` als qualitativen Prädiktor.
   - Alle Spalten von `education` werden verwendet, daher wird der Achsenabschnitt weggelassen.
@@ -2058,7 +1897,7 @@ ageNS = NaturalSpline(df=4).fit_transform(WageDF.age)
 yearNS = NaturalSpline(df=5).fit_transform(WageDF.year)
 # Create a combined design matrix
 XNS_GamLI = [ageNS, yearNS, pd.get_dummies(WageDF.education)]
-XNS_GamDF = np.hstack(XGamLI)
+XNS_GamDF = np.hstack(XNS_GamLI)
 # Shape of XNS_GamDF: 3000 x 14
 GAM_plural = sm.OLS(WageDF.wage, XNS_GamDF).fit()
 summarize(GAM_plural)
@@ -2178,9 +2017,9 @@ summarize(GAM_plural)
 
 - Wir erstellen Partialabhängigkeitsdiagramme für jeden Term im Modell.
 1. Age
-- Wir erstellen eine neue Vorhersagematrix erstellt.
-- Alle Spalten außer `age` sind konstant und auf ihre Mittelwerte im Trainingsdatensatz gesetzt.
-- Die vier `age`-Spalten sind mit der natürlichen Spline-Basis für die 100 `age_grid`-Werte gefüllt.
+- Neue Vorhersagematrix erstellen.
+- Alle Spalten außer `age` sind auf Mittelwerte gesetzt.
+- Die vier `age`-Spalten sind mit der natürlichen Spline-Basis für die `age_grid100`-Werte gefüllt.
 
 ```python=
 # Create ndarray of all zeros with shape 100 x 4
@@ -2238,10 +2077,9 @@ ax.set_title('Partial dependence of year on wage');
 
 ![](Figures/wage_90_0.png)
 
-## Glättungssplines of `age`, `year` and Category of `education`
-- Wir passen das Modell mit Glättungssplines statt natürlichen Splines an.
-- Das `pygam`-Paket benötigt Matrizen, daher konvertieren wir die kategoriale Serie `education` mit `cat.codes` in ein Array.
-- Für `year` verwenden wir nur sieben Basisfunktionen, da es sieben eindeutige Werte (2003-2009) hat.
+## 8.2. Glättungssplines of `age`, `year` and Category of `education`
+- `pygam` benötigt Matrizen, daher konvertieren wir `education` mit `cat.codes` in ein Array.
+- Für `year` verwenden wir sieben Basisfunktionen, da es sieben eindeutige Werte (2003-2009) hat.
 
 ```python=
 # Design matrix
@@ -2273,10 +2111,10 @@ ax.set_title('Partial dependence of age on wage - default lam=0.6');
 
 ![](Figures/wage_95_0.png)
 
-- Die Funktion scheint zu schwanken.
-- Es ist intuitiver, `df` statt `lam` anzugeben.
-- Wir passen ein GAM mit vier Freiheitsgraden für `age` und `year` an.
-- Wir addieren einen Freiheitsgrad wegen des Achsenabschnitts des Glättungssplines.
+- Funktion schwankt.
+- `df` statt `lam` angeben.
+  - GAM mit vier Freiheitsgraden für `age` und `year`.
+  - Einen Freiheitsgrad für den Achsenabschnitt hinzufügen.
 
 ```python=
 age_term = GAM_full.terms[0]
@@ -2312,7 +2150,6 @@ ax.set_title('Partial dependence of year on wage');
 ![](Figures/wage_101_0.png)
 
 3. Education
-- `education` ist eine kategoriale Variable.
 - Das Partialabhängigkeitsdiagramm zeigt die angepassten Konstanten für jede Stufe dieser Variable.
 
 ```python=
@@ -2325,7 +2162,7 @@ ax.set_xticklabels(WageDF['education'].cat.categories, fontsize=8);
 
 ![](Figures/wage_103_0.png)
 
-## ANOVA-Tests für additive Modelle
+## 8.3. ANOVA-Tests für additive Modelle
 
 - In allen Modellen scheint die Funktion von `year` linear zu sein.
 - Wir führen ANOVA-Tests durch, um das beste Modell zu bestimmen:
@@ -2365,8 +2202,6 @@ gam_2.terms[1].lam = approx_lam(XSmS_GamARR, gam_2.terms[1], df=4+1)
 gam_2.fit(XSmS_GamARR, WageDF.wage);
 
 ```
-
-- We perform an ANOVA on the three models fitted above.
 
 ```python=
 anova_gam(gam_0, gam_1, gam_2)
@@ -2415,139 +2250,9 @@ anova_gam(gam_0, gam_1, gam_2)
   </tbody>
 </table>
 
-- The result shows that the model with a linear term in `year` is the preffered model.
-- We repeat the process for `age`.
-
-1. Ohne `age`
-```python=
-gam_0 = LinearGAM(s_gam(1, n_splines=7) + f_gam(2, lam=0))
-gam_0.fit(XSmS_GamARR, WageDF.wage)
-# Set df = 4+1 for the year term
-gam_0.terms[0].lam = approx_lam(XSmS_GamARR, gam_0.terms[0], df=4+1)
-# Refit the model
-gam_0.fit(XSmS_GamARR, WageDF.wage);
-```
-
-2. Mit lineare `age`
-```python=
-gam_1 = LinearGAM(l_gam(0, lam=0) + s_gam(1, n_splines=7) + f_gam(2, lam=0))
-gam_1.fit(XSmS_GamARR, WageDF.wage)
-# Set df = 4+1 for the year term
-gam_1.terms[1].lam = approx_lam(XSmS_GamARR, gam_1.terms[1], df=4+1)
-# Refit the model
-gam_1.fit(XSmS_GamARR, WageDF.wage);
-```
-
-```python=
-anova_gam(gam_0, gam_1, gam_2)
-```
-
-<table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>deviance</th>
-      <th>df</th>
-      <th>deviance_diff</th>
-      <th>df_diff</th>
-      <th>F</th>
-      <th>pvalue</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>3.972516e+06</td>
-      <td>2989.731372</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>3.847544e+06</td>
-      <td>2988.731515</td>
-      <td>124971.879105</td>
-      <td>0.999858</td>
-      <td>101.091386</td>
-      <td>1.698625e-07</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3.693143e+06</td>
-      <td>2987.007254</td>
-      <td>154401.562381</td>
-      <td>1.724260</td>
-      <td>72.425087</td>
-      <td>1.525752e-07</td>
-    </tr>
-  </tbody>
-</table>
-
-- We repeat the process for `age` but based on linear term in `year`
-
-1. Ohne `age` 
-```python=
-gam_0 = LinearGAM(l_gam(1, lam=0) + f_gam(2, lam=0))
-gam_0.fit(XSmS_GamARR, WageDF.wage);
-```
-
-2. Mit lineare `age`
-```python=
-gam_1 = LinearGAM(l_gam(0, lam=0) + l_gam(1, lam=0) + f_gam(2, lam=0))
-gam_1.fit(XSmS_GamARR, WageDF.wage);
-```
-
-```python=
-anova_gam(gam_0, gam_1, gam_2)
-```
-
-<table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>deviance</th>
-      <th>df</th>
-      <th>deviance_diff</th>
-      <th>df_diff</th>
-      <th>F</th>
-      <th>pvalue</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>3.979e+06</td>
-      <td>2994.000</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>3.854e+06</td>
-      <td>2993.000</td>
-      <td>124628.087</td>
-      <td>1.000</td>
-      <td>100.799</td>
-      <td>1.726e-07</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3.693e+06</td>
-      <td>2987.007</td>
-      <td>161143.277</td>
-      <td>5.993</td>
-      <td>21.748</td>
-      <td>4.538e-06</td>
-    </tr>
-  </tbody>
-</table>
-
-- Both results show that the model with a non-linear term in `age` is the preffered model.
-- There is a (verbose) `summary()` method for the GAM fit.
+- Modell mit linearem Term in `year` wird bevorzugt.
+- Modell mit nicht-linearem Term in `age` wird bevorzugt.
+- Es gibt eine `summary()`-Methode für die GAM-Anpassung.
 
 ```python=
 GAM_full.summary()
@@ -2587,15 +2292,9 @@ GAM_full.summary()
 	1. **Fitting splines and a linear function to a feature introduces a model identifiability problem which can cause p-values to appear significant when they are not.**
 	2. **p-values calculated in this manner behave correctly for un-penalized models or models with known smoothing parameters, but when smoothing parameters have been estimated, the p-values are typically lower than they should be, meaning that the tests reject the null too readily.**
 
-	```plaintext
-	C:\Users\tuand\AppData\Local\Temp\ipykernel_6576\3870570873.py:1: UserWarning: KNOWN BUG: p-values computed in this summary are likely much smaller than they should be.
-	Please do not make inferences based on these values!
-	Collaborate on a solution, and stay up to date at:
-	github.com/dswah/pyGAM/issues/163
-	  gam_full.summary()
 
-- We can make predictions from `gam` objects, similarly to `lm` objects, using the `predict()` method for the `gam` class. 
-- We make predictions on the training set (fitted values)
+- Vorhersagen mit `gam`-Objekten wie bei `lm`-Objekten mit der `predict()`-Methode.
+- Vorhersagen auf dem Trainingssatz (angepasste Werte).
 
 ```python=
 Yhat = GAM_full.predict(XSmS_GamARR)
@@ -2603,16 +2302,20 @@ print('First three fitted values:', Yhat[:3])
 print('First three true values:', WageDF.wage[:3].values)
 ```
 
-    First three fitted values: [ 52.3662492   99.63834745 111.7723448 ]
-    First three true values: [ 75.04315402  70.47601965 130.98217738]
+    First three fitted values: [52.366  99.638 111.772]
+    First three true values:   [75.043  70.476 130.982]
 
-- We use `LogisticGAM()` from `pygam` to fit a logistic regression GAM.
+## 8.4. Logistic GAM
+- Verwenden `LogisticGAM()` from `pygam`.
 
 ```python=
-GAM_logit = LogisticGAM(s_gam(0) + l_gam(1, lam=0) + f_gam(2, lam=0))
+# Set and fit logistic GAM
+GAM_logit = LogisticGAM(s_gam(0) + s_gam(1, n_splines=7) + f_gam(2, lam=0))
 GAM_logit.fit(XSmS_GamARR, high_earn)
 # Set df = 4+1 for the age term
 GAM_logit.terms[0].lam = approx_lam(XSmS_GamARR, GAM_logit.terms[0], df=4+1)
+# Set df = 4+1 for the year term
+GAM_logit.terms[1].lam = approx_lam(XSmS_GamARR, gam_2.terms[1], df=4+1)
 # Fit the model
 GAM_logit.fit(XSmS_GamARR, high_earn);
 ```
@@ -2627,7 +2330,7 @@ ax.set_xticklabels(WageDF['education'].cat.categories, fontsize=8);
 
 ![](Figures/wage_124_0.png)
 
-- The model appears quite flat, with particularly high error bars for the first category. Let's examine the data more closely.
+- Modell ist flach, hohe Fehlerbalken in der ersten Kategorie. Daten genauer prüfen.
 
 ```python=
 pd.crosstab(high_earn, WageDF.education)
@@ -2664,17 +2367,17 @@ pd.crosstab(high_earn, WageDF.education)
   </tbody>
 </table>
 
-- There aren't any high earners in the first education category, making it difficult for the model to fit.
-- We fit a logistic regression GAM excluding all observations in this category, providing more reasonable results.
+- Keine hohen Verdiener in der ersten Bildungskategorie, Modell passt schwer.
+- Logistische Regression ohne diese Kategorie liefert bessere Ergebnisse.
 
 ```python=
-# Create a vector of categories for lower education
+# Create a indicator vector for lower education
 only_hs = WageDF.education == '1. < HS Grad'
 # Remove rows with lower education
 WageHsDF = WageDF[~only_hs]
-# Subtract one from the codes of the category, due to a bug in pygam. 
-# It just relabels the education values and hence has no effect on the fit.
 XHsDF = np.column_stack([WageHsDF.age, WageHsDF.year, WageHsDF.education.cat.codes-1])
+# WageHsDF.education.cat.codes minus 1 due to a bug in pygam. 
+# It relabels the education values and has no effect on the fit.
 # Create the response variable for high earners
 high_earn_hs = WageHsDF.wage > 250
 ```
@@ -2689,8 +2392,6 @@ GAM_logit_hs.terms[1].lam = approx_lam(XHsDF, gam_2.terms[1], df=4+1)
 # Refit the model
 GAM_logit_hs.fit(XHsDF, high_earn_hs);
 ```
-
-- Now that we've removed those observations, let's examine the effect of `education`, `year`, and `age` on the high earner status.
 
 ```python=
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -2724,7 +2425,6 @@ ax.set_title('Partial dependence of high earner status on age');
 
 - Definition
   - Anpassung nicht-linearer Funktionen durch nahe liegende Trainingsdaten.
-  - Beispieldaten in Abbildung 7.9 mit Zielpunkten bei 0.4 und 0.05.
 
 - Algorithmus 7.1 Lokale Regression bei X = $x_0$
     1. Sammeln von s = k/n der nächsten Trainingspunkte zu $x_0$.
@@ -2751,20 +2451,18 @@ ax.set_title('Partial dependence of high earner status on age');
   - Vorsicht bei hoher Dimensionalität, da wenige nahe Trainingsdaten.
 
 
-- Wir verwenden `lowess()` aus `sm.nonparametric` für ein lokales Regressionsmodell.
-- Wir passen lokale lineare Regressionsmodelle mit Spannen von 0.2 und 0.5 an.
-- Eine Spanne von 0.5 ergibt ein glatteres Modell als 0.2.
+- `lowess()` aus `sm.nonparametric` für lokales Regressionsmodell verwenden.
+- Lokale lineare Regressionsmodelle mit Spannen von 0.2 und 0.5 anpassen.
+- Spanne von 0.5 ergibt glatteres Modell als 0.2.
 
 ```python=
 lowess = sm.nonparametric.lowess
-# Set up the plot
+# Plot
 fig, ax = plt.subplots(figsize=(8,8))
-# Scatter plot of the data
 ax.scatter(WageDF.age, WageDF.wage , facecolor='gray', alpha=0.5)
 for span in [0.2, 0.5]:
     fitted = lowess(WageDF.wage, WageDF.age, frac=span, xvals=age_grid)
-    ax.plot(age_grid, fitted,
-            label='{:.1f}'.format(span))
+    ax.plot(age_grid, fitted, label='{:.1f}'.format(span))
 ax.set_xlabel('Age', fontsize=20); ax.set_ylabel('Wage', fontsize=20)
 ax.legend(title='span');
 ```
