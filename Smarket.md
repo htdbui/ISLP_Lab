@@ -896,8 +896,8 @@ np.mean(qda_pred == L_test)
 - Schätzt $\pi_1, \ldots, \pi_K$ als Anteil der Trainingsbeobachtungen pro Klasse.
 - Schätzt $f_1(x), \ldots, f_K(x)$ unter Annahme unabhängiger Prädiktoren innerhalb jeder Klasse.
   - $f_k(x) = f_{k1}(x_1) \times f_{k2}(x_2) \times \cdots \times f_{kp}(x_p)$
-  - Schätzung von $f_{kj} \equiv Pr(X_j \mid Y = k): 
-    - Quantitativ: (X_j \mid Y = k) \sim N(\mu_{jk}, \sigma_{jk}^2)$ oder mit nichtparametrischen Methoden (Histogramm, Kernel Density Estimator).
+  - Schätzung von $f_{kj} \equiv Pr(X_j \mid Y = k)$: 
+    - Quantitativ: $(X_j \mid Y = k) \sim N(\mu_{jk}, \sigma_{jk}^2)$ oder mit nichtparametrischen Methoden (Histogramm, Kernel Density Estimator).
     - Qualitativ: Anteil der Trainingsbeobachtungen für jede Klasse.
 - Vereinfachung durch Unabhängigkeitsannahme: keine Berücksichtigung der gemeinsamen Verteilung der Prädiktoren.
 - Naive Bayes führt oft zu guten Ergebnissen, besonders bei kleinen n im Vergleich zu p
