@@ -553,7 +553,7 @@ ax.set_xticks(np.arange(20)[::2]); ax.set_ylim([50000,250000]); ax.legend(); mse
   
   - Gilt für $\beta_1, \ldots, \beta_p$, nicht für $\beta_0$.
   - $\beta_0$ misst den Mittelwert bei $x_{i1} = x_{i2} = \ldots = x_{ip} = 0$.
-  - Bei zentrierten Daten: $\hat{\beta}_0 = \bar{y} = \sum_{i=1}^{n} y_i / n$.
+  - Bei zentrierten Daten: $\hat{\beta}_0 = \bar{y} = \sum_{i=1}^{n} y_i/n$.
 
 - **ℓ₂ Norm:**
   
