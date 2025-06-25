@@ -1024,7 +1024,7 @@ confusion_table(khan_linear.predict(Khan['xtest']), Khan['ytest'])
   
   - SVMs ähneln klassischen Methoden wie der logistischen Regression.
   - Kriterium für SVMs: Minimierung der Verlustfunktion plus Strafe.
-    - Beispiel: $\text{minimiere} \left\{ \sum_{i=1}^{n} \max[0, 1 - y_i f(x_i)] + \lambda \sum_{j=1}^{p} \beta_j^2 \right\}$.
+    - Beispiel: $\text{minimiere} \{ \sum_{i=1}^{n} \max[0, 1 - y_i f(x_i)] + \lambda \sum_{j=1}^{p} \beta_j^2 \}$.
   - $\lambda$: Tuning-Parameter zur Steuerung von Bias und Varianz.
   - Form: $\text{minimiere} \{L(X, y, \beta) + \lambda P(\beta)\}$.
     - $L(X, y, \beta)$: Verlustfunktion.
